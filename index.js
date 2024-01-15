@@ -3,7 +3,14 @@ const { clientId, guildId, token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ 	
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+    ],
+});
 
 client.commands = new Collection();
 const folderPath = path.join(__dirname, 'commands');
@@ -25,36 +32,18 @@ for (const folder of commandFolders) {
     }
 }
 
-client.once(Events.ClientReady, clientReady => {
-    console.log(`Готов! Запущен ${clientReady.user.tag}`)
-})
+const eventsPath = path.join(__dirname, 'events');
+const eventFile = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
-client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
+for (const file of eventFile) {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
 
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-        console.error(`Команда с именем ${interaction.commandName} не найдена!`)
-        return;
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
     }
-
-    try {
-        await command.execute(interaction);
-    } catch (error) {
-        console.log(error);
-        if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({
-                content: 'При выполнении команды произошла ошибка!',
-                ephemeral: true
-            });
-        } else {
-            await interaction.reply({
-                content: 'При выполнении команды произошла ошибка!',
-                ephemeral: true
-            });
-        }
-    }
-});
+}
 
 client.login(token)

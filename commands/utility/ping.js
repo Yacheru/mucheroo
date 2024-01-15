@@ -5,9 +5,11 @@ module.exports = {
         .setName('ping')
         .setDescription('Понг.'),
     async execute(interaction) {
-        await interaction.reply({
-            content: `Понг!`,
-            ephemeral: true
+        const sent = await interaction.reply({
+            content: `Вычисляем...`,
+            ephemeral: true,
+            fetchReply: true
         });
+        interaction.editReply(`Задержка: ${sent.createdTimestamp - interaction.createdTimestamp}мс`);
     },
 };
