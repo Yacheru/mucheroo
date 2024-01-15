@@ -4,6 +4,6 @@ module.exports = {
     name: Events.ClientReady, 
     once: true,
     execute (client) {
-        console.log(`Готов! Запущен ${client.user.tag}`)
+        console.log(`Готов! Запущен ${client.user.tag}\nЗадержка бота: ${client.ws.ping}мс.`)
     },
 };
