@@ -2,8 +2,8 @@ const { PermissionFlagsBits } = require('discord.js')
 
 module.exports = {
     data: {
-        name: 'ticket',
-        description: 'Отправить эмбед с тикетом',
+        name: 'say',
+        description: 'Отправить сообщение от лица бота',
     },
     execute: async (client, message, args) => {
         const channel = message.mentions.channels.first();
