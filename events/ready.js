@@ -1,9 +1,9 @@
-const { Events } = require('discord.js')
+const { Events } = require('discord.js');
 
 module.exports = { 
     name: Events.ClientReady, 
     once: true,
     execute (client) {
-        console.log(`Готов! Запущен ${client.user.tag}\nЗадержка бота: ${client.ws.ping}мс.`)
+        console.log(`${client.user.tag} Готов!`);
     },
 };

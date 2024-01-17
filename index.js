@@ -1,5 +1,5 @@
-const { Client, GatewayIntentBits, Collection, } = require('discord.js');
-const { token } = require('./config.json');
+const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
+const { token, prefix } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -7,17 +7,26 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.DirectMessages,
     ],
+    presence: {
+        activities: [{
+            type: ActivityType.Competing,
+            name: "разработке..."
+        }],
+    },
 });
 
 client.commands = new Collection();
-const folderPath = path.join(__dirname, 'commands');
-const commandFolders = fs.readdirSync(folderPath);
+client.prefix = new Collection()
 
-for (const folder of commandFolders) {
-    const commandsPath = path.join(folderPath, folder);
+const slashPath = path.join(__dirname, './commands/slash');
+const slashsFolders = fs.readdirSync(slashPath);
+
+for (const folder of slashsFolders) {
+    const commandsPath = path.join(slashPath, folder);
     const commandsFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
     for (const file of commandsFiles) {
@@ -27,7 +36,7 @@ for (const folder of commandFolders) {
         if ('data' in command && 'execute' in command) {
             client.commands.set(command.data.name, command)
         } else {
-            console.log(`[WARNING] В Команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
+            console.log(`[/] [WARNING] В команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
         }
     }
 }
@@ -43,6 +52,20 @@ for (const file of eventFile) {
         client.once(event.name, (...args) => event.execute(...args));
     } else {
         client.on(event.name, (...args) => event.execute(...args));
+    }
+}
+
+const prefixPath = path.join(__dirname, './commands/prefix');
+const prefixFiles = fs.readdirSync(prefixPath).filter(file => file.endsWith('.js'));
+
+for (const file of prefixFiles) {
+    const filePath = path.join(prefixPath, file);
+    const command = require(filePath);
+
+    if ('data' in command && 'execute' in command) {
+        client.prefix.set(command.data.name, command)
+    } else {
+        console.log(`[${prefix}] [WARNING] В команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
     }
 }
 

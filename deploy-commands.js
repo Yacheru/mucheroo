@@ -1,10 +1,11 @@
 const { REST, Routes } = require('discord.js');
-const { clientId, guildId, token } = require('./config.json');
+const { clientId, token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 
 const commands = [];
-const folderPath = path.join(__dirname, 'commands');
+
+const folderPath = path.join(__dirname, './commands/slash');
 const commandFolders = fs.readdirSync(folderPath);
 
 for (const folder of commandFolders) {
@@ -18,7 +19,7 @@ for (const folder of commandFolders) {
         if ('data' in command && 'execute' in command) {
             commands.push(command.data.toJSON());
         } else {
-            console.log(`[WARNING] В Команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
+            console.log(`[/] [WARNING] В команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
         }
     }
 }
@@ -34,7 +35,7 @@ const rest = new REST().setToken(token);
             { body: commands },
         );
         
-        console.log(`[/] ${data.length} команды успешно перезагружены.`);
+        console.log(`[/] ${data.length} команд успешно перезагружены.`);
     } catch (error) {
         console.error(error);
     }

@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, userMention } = require('discord.js');
+const { logschannel } = require('C:/programming/bots/js/mucheru/config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,7 +28,7 @@ module.exports = {
         const userAvatar = member.avatar !== null
             ? `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.png?size=1024`
             : 'https://cdn.discordapp.com/embed/avatars/0.png';
-        const logChannel = interaction.guild.channels.cache.find(channel => channel.name === 'mucheru-logs');
+        const logChannel = interaction.guild.channels.cache.find(channel => channel.name === logschannel);
         const creator = interaction.member;
         const banEmbed = new EmbedBuilder()
             .setColor('#2f3236')
