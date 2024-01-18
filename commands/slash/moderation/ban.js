@@ -24,16 +24,12 @@ module.exports = {
     async execute(interaction) {
         const member = interaction.options.getUser('member');
         const reason = interaction.options.getString('reason') ?? 'Причина не указана.';
-
-        const userAvatar = member.avatar !== null
-            ? `https://cdn.discordapp.com/avatars/${member.id}/${member.avatar}.png?size=1024`
-            : 'https://cdn.discordapp.com/embed/avatars/0.png';
         const logChannel = interaction.guild.channels.cache.find(channel => channel.name === logschannel);
         const creator = interaction.member;
         const banEmbed = new EmbedBuilder()
             .setColor('#2f3236')
             .setAuthor({ name: 'Блокировка участника', iconURL: 'https://cdn.discordapp.com/attachments/1129601347352809532/1196352737860919356/hammer-sledge_.png' })
-            .setThumbnail(userAvatar)
+            .setThumbnail(creator.displayAvatarURL())
             .addFields(
                 { name: 'Исполнитель:', value: `${creator.displayName}\n(${userMention(creator.id)})`, inline: true },
                 { name: 'Участник:', value: `${member.displayName}\n(${userMention(member.id)})`, inline: true }

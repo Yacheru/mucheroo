@@ -1,5 +1,6 @@
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, InteractionType } = require('discord.js')
 const modalHandler = require('../handlers/modalHandlers');
+const buttonHandler = require('../handlers/buttonsHandlers')
 
 module.exports = {
     name: Events.InteractionCreate,
@@ -20,13 +21,29 @@ module.exports = {
             }
 
         } else if (interaction.isButton()) {
-            if (interaction.customId === 'player') {
-                const playerModal = modalHandler.createPlayerModal();
-                interaction.showModal(playerModal);
+            switch (interaction.customId) {
+                case 'player':
+                    const playerModal = modalHandler.createPlayerModal();
+                    interaction.showModal(playerModal);
+                    break
+                case 'questions':
+                    const questionModal = modalHandler.createQuestionsModal();
+                    interaction.showModal(questionModal);
+                    break
+                case 'closeTicket':
+                    buttonHandler.closeTicketButtonCallback(interaction)
+                    break
+                case 'deleteTicket':
+                    buttonHandler.deleteTicketButtonCallback(interaction)
+                    break
+                default:
+                    console.log('ID Компонента не найден!')
+                    break
             }
 
         } else if (interaction.type === InteractionType.ModalSubmit) {
             modalHandler.handlePlayerModalSubmit(interaction);
+            modalHandler.handleQuestionModalSubmit(interaction);
         };
     }
 };
