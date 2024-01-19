@@ -37,9 +37,9 @@ for (const folder of slashsFolders) {
             client.commands.set(command.data.name, command)
         } else {
             console.log(`[/] [WARNING] В команде по пути ${filePath} отсутствуют важные параметры: 'data' и 'execute'`)
-        }
-    }
-}
+        };
+    };
+};
 
 const eventsPath = path.join(__dirname, 'events');
 const eventFile = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
