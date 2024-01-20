@@ -1,1 +1,8 @@
-node_modules
+**/node_modules
+
+**/.idea
+
+**/.eslintrc.json
+
+**/README.md
+**/LICENSE
