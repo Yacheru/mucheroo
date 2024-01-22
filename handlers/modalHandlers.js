@@ -1,9 +1,9 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ChannelType, PermissionFlagsBits, channelMention, userMention, EmbedBuilder } = require('discord.js');
-const { transperentImage } = require('../config.json');
+const { transperentImage, channels } = require('../config.json');
 const buttonsHandler = require('./buttonsHandlers');
 
 const playerComplaintsThumbnail = 'https://cdn.discordapp.com/attachments/1129601347352809532/1197402491931861023/playerComplaints.png'
-const questionThumbnail = ''
+const questionThumbnail = 'https://cdn.discordapp.com/attachments/1129601347352809532/1198288820936917023/anotherQuestion.png'
 
 module.exports = {
     createPlayerModal: function () {
@@ -78,7 +78,7 @@ module.exports = {
             const channel = await interaction.guild.channels.create({ 
                 name: `Жалоба〢${interaction.member.displayName}`, 
                 type: ChannelType.GuildText, 
-                parent: '1197370690010108047',
+                parent: `${channels.openTicketCategory}`,
                 permissionOverwrites: [
                     {
                         id: interaction.guild.roles.everyone,
@@ -107,7 +107,7 @@ module.exports = {
                 .setAuthor({ name: `${interaction.member.displayName}`, iconURL: interaction.member.displayAvatarURL() })
                 .setTitle('Вопрос')
                 .setImage(transperentImage)
-                .setThumbnail(playerComplaintsThumbnail)
+                .setThumbnail(questionThumbnail)
                 .setDescription(`Комментарий заявителя:\n> ${question}`)
                 .setFooter({ text: `Нажмите на кнопку ниже, чтобы закрыть обращение` })
                 .setTimestamp()

@@ -6,11 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "pm2": "pm2 start --log ./logs/pm2/logs.log --error ./logs/pm2/errors.log --time"
   },
   "author": "yacheru",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.3.0",
     "discord.js": "^14.14.1"
   }
 }

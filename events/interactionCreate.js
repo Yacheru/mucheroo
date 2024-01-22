@@ -5,7 +5,7 @@ const buttonHandler = require('../handlers/buttonsHandlers')
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction)  {
-        if (interaction.isChatInputCommand()) {;
+        if (interaction.isChatInputCommand()) {
             const command = interaction.client.commands.get(interaction.commandName);
 
             if (!command) {
@@ -18,6 +18,14 @@ module.exports = {
             } catch (error) {
                 console.log(`Ошибка выполнения ${command.commandName}`);
                 console.log(error);
+            }
+
+        } else if (interaction.isAutocomplete()) {
+            const command = interaction.client.commands.get(interaction.commandName);
+            try {
+                await command.autocomplete(interaction);
+            } catch (error) {
+                console.error(error);
             }
 
         } else if (interaction.isButton()) {

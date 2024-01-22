@@ -22,6 +22,5 @@ module.exports = {
             console.log(error);
             await message.reply({ content: 'При выполнении команды произошла ошибка!', ephemeral: true });
         };
-
-    }
+    },
 };

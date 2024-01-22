@@ -1,4 +1,5 @@
 const { PermissionFlagsBits, ButtonStyle, EmbedBuilder, ButtonBuilder, ActionRowBuilder } = require('discord.js')
+const { channels } = require('../config.json')
 
 
 module.exports = {
@@ -31,7 +32,7 @@ module.exports = {
         interaction.channel.delete()
 
     }, closeTicketButtonCallback: function (interaction) {
-        interaction.channel.setParent('1197439135112241255');
+        interaction.channel.setParent(`${channels.closedTicketCategory}`);
         interaction.message.edit({ 
             components: [this.deleteTicketButton()], 
         })

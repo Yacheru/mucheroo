@@ -1,13 +1,13 @@
-const { SlashCommandBuilder, EmbedBuilder, roleMention, time } = require('discord.js')
+const { SlashCommandBuilder, EmbedBuilder, roleMention, time, Colors } = require('discord.js')
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('user')
-        .setDescription('Выводит информацию о пользователе.')
+        .setDescription('Выводит информацию о пользователе')
         .addUserOption(option =>
             option
                 .setName('member')
-                .setDescription('Выберите пользователя.')
+                .setDescription('Выберите пользователя')
             ),
     async execute(interaction) {
         const member = interaction.options.getMember('member') ?? interaction.member;
@@ -17,10 +17,10 @@ module.exports = {
         const userCreatedAt = `${time(Math.round(user.createdTimestamp / 1000), 'f')}\n(${time(Math.round(user.createdTimestamp / 1000), 'R')})`
         const userJoinedAt = `${time(Math.round(member.joinedTimestamp / 1000), 'f')}\n(${time(Math.round(member.joinedTimestamp / 1000), 'R')})`
         const userRoles = member.roles.cache.size > 1 ? member.roles.cache.filter(role => role.name !== '@everyone').map(role => roleMention(role.id)).join(' ') : 'Пользователь не имеет ролей';
-        const firstRoleColor = member.roles.cache.size > 1 ? member.roles.cache.filter(role => role.name !== '@everyone').map(role => role.color)[0].toString(16) : '313338';
+        const firstRoleColor = member.displayHexColor;
 
         const userEmbed = new EmbedBuilder()
-            .setColor(`#${firstRoleColor}`)
+            .setColor(firstRoleColor)
             .setTitle('Информация о пользователе')
             .setAuthor({ name: `${userName} ID: ${member.id}`, iconURL: member.displayAvatarURL() })
             .setThumbnail(member.displayAvatarURL())

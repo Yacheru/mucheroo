@@ -1,9 +1,9 @@
-const { Events } = require('discord.js')
+const { Events, time } = require('discord.js')
 
 module.exports = { 
     name: Events.GuildMemberUpdate, 
-    execute (client, oldMember, newMember) {
-        const oldStatus = oldMember.premiumSince
-        const newStatus = newMember.premiumSince
+    async execute (oldMember, newMember) {
+        if (newMember.isCommunicationDisabled()) return console.log(`${newMember.displayName} отправлен в тайм-аут до ${time(newMember.communicationDisabledUntilTimestamp / 1000, 'R')} участником: `)
+        if (!newMember.isCommunicationDisabled()) return console.log(`${newMember.displayName} возвращён голос участником: `)
     },
 };

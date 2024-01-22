@@ -5,6 +5,7 @@ module.exports = {
         script : './index.js',
         cwd : '.',
         error_file : './logs/pm2/errors.log',
-        out_file: './logs/pm2/logs.log'
+        out_file: './logs/pm2/logs.log',
+        log_date_formatL: 'YYYY-MM-DD'
     }]
 }
