@@ -1,7 +1,15 @@
 const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { token, prefix } = require('./config.json');
+const db = require('./database');
+const models = require('./database/models');
 const fs = require('node:fs');
 const path = require('node:path');
+
+Object.keys(models).forEach(ele => {
+    models[ele].associate(models);
+})
+
+db.sync({force: false})
 
 
 const client = new Client({ 	

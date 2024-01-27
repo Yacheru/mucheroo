@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, Colors, userMention, time, ChannelType } = require('discord.js')
-const { roles } = require('../../../config.json')
+const { roles, images } = require('../../../config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -37,6 +37,7 @@ module.exports = {
                 { name: 'Пользователи', value: `- ${userCount}` },
                 { name: 'Бустеры', value: `- ${guildBoost}` }
             )
+            .setImage(images.transperentImage)
             .setFooter({ text: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
             .setTimestamp()
 

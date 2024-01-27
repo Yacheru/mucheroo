@@ -45,13 +45,22 @@ module.exports = {
                     buttonHandler.deleteTicketButtonCallback(interaction)
                     break
                 default:
-                    console.log('ID Компонента не найден!')
+                    console.log(`ID (${interaction.customId}) Компонента не найден!`)
                     break
             }
 
         } else if (interaction.type === InteractionType.ModalSubmit) {
-            modalHandler.handlePlayerModalSubmit(interaction);
-            modalHandler.handleQuestionModalSubmit(interaction);
+            switch (interaction.customId) {
+                case 'playerModal':
+                    modalHandler.handlePlayerModalSubmit(interaction);
+                    break
+                case 'questionsModal':
+                    modalHandler.handleQuestionModalSubmit(interaction);
+                    break
+                default:
+                    console.log(`ID (${interaction.customId}) Компонента не найден!`)
+                    break
+            }
         };
     }
 };

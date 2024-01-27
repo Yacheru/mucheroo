@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, userMention } = require('discord.js')
-const { channels, icons, transperentImage } = require('../../../config.json')
+const { channels, icons, images } = require('../../../config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,7 +32,7 @@ module.exports = {
             )
             .addFields({ name: 'Причина:', value: reason })
             .setFooter({ text: interaction.guild.name, iconURL: interaction.guild.iconURL() })
-            .setImage(transperentImage)
+            .setImage(images.transperentImage)
             .setTimestamp()
         
         await logChannel.send({ embeds: [kickEmbed] });

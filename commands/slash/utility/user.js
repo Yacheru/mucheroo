@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, roleMention, time, Colors } = require('discord.js')
+const { images } = require('../../../config.json')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -28,6 +29,7 @@ module.exports = {
                 { name: 'Аккаунт создан:', value: userCreatedAt, inline: true },
                 { name: 'Присоединился:', value: userJoinedAt, inline: true},
             )
+            .setImage(images.transperentImage)
             .addFields({ name: 'Роли на сервере:', value: `${userRoles}` })
             .setTimestamp()
             .setFooter({ text: guildName, iconURL: interaction.guild.iconURL()});
