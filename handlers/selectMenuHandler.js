@@ -1,60 +1,46 @@
-const { PermissionFlagsBits, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js')
-const { channels, tmpvoiceIcons } = require('../config.json')
-
+const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, userMention } = require('discord.js');
+const { icons } = require('../config.json');
+const { warns } = require('../database/models');
 
 module.exports = {
-    tamplateRooms: function () {
-        return new ActionRowBuilder().addComponents(
-            new StringSelectMenuBuilder()
-            .setCustomId('templateRooms')
-            .setPlaceholder('Шаблоны каналов')
-            .addOptions(
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Мой шаблон')
-                    .setValue('мой шаблон')
-                    .setDescription('Применить собственный шаблон')
-                    .setEmoji(tmpvoiceIcons.template),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Общение')
-                    .setValue('общение')
-                    .setDescription('25 участников, 128 кб/с, открытый канал')
-                    .setEmoji(tmpvoiceIcons.communicat),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Кинотеатр')
-                    .setValue('кинотеатр')
-                    .setDescription('Безлимит, 128 кб/с, Говорит только создатель.')
-                    .setEmoji(tmpvoiceIcons.cinema),
-            ),
-        );
-    }, bitrateChange: function () {
-        return new ActionRowBuilder().addComponents(
-            new StringSelectMenuBuilder()
-            .setCustomId('bitrateChange')
-            .setPlaceholder('Качество звука')
-            .addOptions(
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Низкое')
-                    .setValue('низкое')
-                    .setDescription('24 кб/с.'),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Среднее')
-                    .setValue('среднее')
-                    .setDescription('64 кб/с.'),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Хорошее')
-                    .setValue('хорошее')
-                    .setDescription('128 кб/с.'),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Высшее')
-                    .setValue('высшее')
-                    .setDescription('256 кб/с. Лидерам общения!')
-                    .setEmoji(tmpvoiceIcons.voiceLeader),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Наивысшее')
-                    .setValue('наивысшее')
-                    .setDescription('384 кб/с. Бустерам сервера на 3 уровне сервера.')
-                    .setEmoji(tmpvoiceIcons.boosted),    
-            ),
-        );
-    },
+	warnTakeSelect: function(interaction, warnsrow, memberid) {
+		if (Object.keys(warnsrow).length === 0) {
+			return new ActionRowBuilder().addComponents(
+				new StringSelectMenuBuilder()
+					.setCustomId('CustomID')
+					.setPlaceholder('У пользователя нет предупреждений')
+					.setDisabled(true)
+					.addOptions(new StringSelectMenuOptionBuilder()
+						.setLabel('label')
+						.setValue('emptyvalue')));
+		}
+		else {
+			return new ActionRowBuilder().addComponents(
+				new StringSelectMenuBuilder()
+					.setCustomId('warnTakeSelect')
+					.setPlaceholder('Выберите предупреждение')
+					.setOptions(...Object.values(warnsrow)
+						.map((warn) => ({
+							label: `${Object.keys(warnsrow).find((key) => warnsrow[key] === warn)} [${warn[1]}]`,
+							value: `${[memberid, Object.keys(warnsrow).find((key) => warnsrow[key] === warn)]}`,
+							description: `${interaction.guild.members.cache.get(warn[0]).displayName} • ${new Date(warn[2]).toLocaleString()}`,
+							emoji: icons.warn,
+						})),
+					),
+			);
+		}
+	}, warnTakeSelectCallback: async function(interaction) {
+		const [memberId, warnKey] = interaction.values[0].split(',');
+
+		const warnRow = await warns.findOne({ where: { userID: memberId } });
+
+		delete warnRow.warns[warnKey];
+
+		await warns.update({ warns: { ...warnRow.warns } }, { where: { userID: memberId } });
+
+		interaction.update({
+			content: `Вы успешно удалили предупреждение ${warnKey} пользователя ${userMention(memberId)}`,
+			components: [this.warnTakeSelect(interaction, warnRow.warns, memberId)],
+		});
+	},
 };

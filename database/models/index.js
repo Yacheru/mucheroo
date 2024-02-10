@@ -1,4 +1,11 @@
-const User = require('./user');
-const Message = require('./messages');
+const Messages = require('./messages');
+const tempRooms = require('./temprooms');
+const tempRoomsTemplate = require('./tempRoomsTemplates');
+const warns = require('./warns');
 
-module.exports = {User, Message};
+module.exports = {
+	Messages,
+	tempRooms,
+	tempRoomsTemplate,
+	warns,
+};

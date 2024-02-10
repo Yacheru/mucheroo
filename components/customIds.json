@@ -1,0 +1,14 @@
+{   
+    "ticketsystem": {
+        "ticketSystemAllCustomIDs": ["player", "questions", "closeTicket", "deleteTicket", "playerModal", "questionsModal"],
+        "ticketSystemButtonsCustomIDs": ["player", "questions", "closeTicket", "deleteTicket"],
+        "ticketSystemModalCustomIDs": ["playerModal", "questionsModal"]
+    },
+
+    "temprooms": {
+        "privateRoomsAllCustomIDs": ["upslot", "hide", "private", "voice", "downslot", "limit", "name", "info", "templateButton", "createTemplate", "cancelTemplate", "more", "nameModal", "limitModal", "tempRoomsVoiceSelect", "templateRooms", "bitrateChange"],
+        "privateRoomsButtonsCustomIDs": ["upslot", "hide", "private", "voice", "downslot", "limit", "name", "info", "templateButton", "createTemplate", "cancelTemplate", "more"],
+        "privateRoomsModalCustomIDs": ["nameModal", "limitModal"],
+        "privateRoomsSelectMenuCustomIDs": ["tempRoomsVoiceSelect", "templateRooms", "bitrateChange"]
+    }
+}
