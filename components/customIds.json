@@ -7,7 +7,7 @@
 
     "temprooms": {
         "privateRoomsAllCustomIDs": ["upslot", "hide", "private", "voice", "downslot", "limit", "name", "info", "templateButton", "createTemplate", "cancelTemplate", "more", "nameModal", "limitModal", "tempRoomsVoiceSelect", "templateRooms", "bitrateChange"],
-        "privateRoomsButtonsCustomIDs": ["upslot", "hide", "private", "voice", "downslot", "limit", "name", "info", "templateButton", "createTemplate", "cancelTemplate", "more"],
+        "privateRoomsButtonsCustomIDs": ["upslot", "hide", "private", "voice", "downslot", "limit", "name", "info", "templateButton", "createTemplate", "cancelTemplate", "deleteTemplate", "more"],
         "privateRoomsModalCustomIDs": ["nameModal", "limitModal"],
         "privateRoomsSelectMenuCustomIDs": ["tempRoomsVoiceSelect", "templateRooms", "bitrateChange"]
     }

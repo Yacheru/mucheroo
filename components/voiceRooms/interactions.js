@@ -45,6 +45,8 @@ module.exports = {
                 return buttonHandler.createTemplateSuccessCallback(interaction);
             case 'cancelTemplate':
                 return buttonHandler.cancelTemplatecallback(interaction);
+            case 'deleteTemplate':
+                return buttonHandler.deleteTemplateButtonCallback(interaction);
             case 'more':
                 return buttonHandler.voiceRoomsMoreCallback(interaction);
             default:

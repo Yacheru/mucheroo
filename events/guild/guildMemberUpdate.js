@@ -1,9 +1,17 @@
-const { Events, time } = require('discord.js');
+const { Events } = require('discord.js');
+const { onBoostAdd, onBoostRemove } = require('../../components/boostSystem/onBoostHandler');
 
 module.exports = {
-	name: Events.GuildMemberUpdate,
-	async execute(oldMember, newMember) {
-		if (newMember.isCommunicationDisabled() && !oldMember.isCommunicationDisabled()) return console.log(`${newMember.displayName} отправлен в тайм-аут до ${time(newMember.communicationDisabledUntilTimestamp / 1000, 'R')} участником: `);
-		if (!newMember.isCommunicationDisabled() && oldMember.isCommunicationDisabled()) return console.log(`${newMember.displayName} возвращён голос участником: `);
-	},
+    name: Events.GuildMemberUpdate,
+    async execute(oldMember, newMember) {
+		// !oldMember.premiumSince && newMember.premiumSince
+		// oldMember.premiumSincee && !newMember.premiumSince
+
+        if (newMember.roles.cache.some((role) => role.id === '1159334533913661450')) {
+			return await onBoostAdd(newMember);
+        }
+		else if (!newMember.roles.cache.some((role) => role.id === '1159334533913661450')) {
+            return await onBoostRemove(newMember);
+        }
+    },
 };

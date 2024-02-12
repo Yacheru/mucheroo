@@ -25,7 +25,7 @@ Messages.init(
 			afterCreate: (user, options) => {
 				dbLogger.info(`[MESSAGES] Пользователь ${user.userID} занесен в таблицу.`);
 			},
-			afterUpdate: (user, option) => {
+			afterUpdate: (user, options) => {
 				dbLogger.info(`[MESSAGES] Пользователь ${user.userID} написал сообщение, новое количество сообщений - ${user.count}`);
 			},
 		},

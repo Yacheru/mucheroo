@@ -41,7 +41,7 @@ module.exports = {
 			],
 		});
 		interaction.message.embeds[0].data.footer.text = `Тикет закрыт: ${interaction.member.displayName}`;
-		interaction.message.edit({ components: [this.deleteTicketButton()] });
-		return interaction.reply({ content: 'Тикет успешно закрыт!', ephemeral: true, embeds: [interaction.message.embeds[0]] });
+		interaction.message.edit({ components: [this.deleteTicketButton()], embeds: [interaction.message.embeds[0]] });
+		return interaction.reply({ content: 'Тикет успешно закрыт!', ephemeral: true });
 	},
 };

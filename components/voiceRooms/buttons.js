@@ -73,6 +73,16 @@ module.exports = {
 				.setLabel('Отмена')
 				.setStyle(ButtonStyle.Secondary),
 		);
+	}, deleteTemplateButton: function() {
+		return new ActionRowBuilder().addComponents(
+			new ButtonBuilder()
+				.setCustomId('deleteTemplate')
+				.setLabel('Удалить')
+				.setStyle(ButtonStyle.Danger),
+		);
+	}, deleteTemplateButtonCallback: async function(interaction) {
+		await tempRoomsTemplate.destroy({ where: { userID: interaction.member.id } });
+		return interaction.update({ content: 'Ваш шаблон успешно удалён!', ephemeral: true, embeds: [], components: [] });
 	}, cancelTemplatecallback: function(interaction) {
 		return interaction.update({ embeds: [], content: 'Вы успешно отменили запрос на создание комнаты!', ephemeral: true, components: [] });
 	}, createTemplateSuccessCallback: async function(interaction) {
@@ -80,7 +90,7 @@ module.exports = {
 		await tempRoomsTemplate.create({ userID: interaction.member.id, channelLimit: voiceChannel.userLimit, channelName: voiceChannel.name, channelBitrate: voiceChannel.bitrate });
 		return interaction.update({ embeds: [], content: 'Ваш шаблон успешно создан!', ephemeral: true, components: [] });
 	}, voiceRoomsUpslotCallback: function(interaction) {
-		if (interaction.member.voice.channel.userLimit === '99') return interaction.reply({ content: `${tmpvoiceIcons.upslot} Лимит участников достиг максимума!`, ephemeral: true });
+		if (interaction.member.voice.channel.userLimit === 99) return interaction.reply({ content: `${tmpvoiceIcons.upslot} Лимит участников достиг максимума!`, ephemeral: true });
 		interaction.member.voice.channel.edit({ userLimit: interaction.member.voice.channel.userLimit + 1 });
 		return interaction.reply({ content: `${tmpvoiceIcons.upslot} Лимит участников успешно изменен!`, ephemeral: true });
 	}, voiceRoomsHideCallback: function(interaction) {
@@ -115,7 +125,7 @@ module.exports = {
 
 		privateCollection.set(memberChannelId, privateCollection.get(memberChannelId) === 'open' ? 'closed' : 'open');
 	}, voiceRoomsDownslotCallback: function(interaction) {
-		if (interaction.member.voice.channel.userLimit === '0') return interaction.reply({ content: `${tmpvoiceIcons.downslot} Лимит участников достиг минимума!`, ephemeral: true });
+		if (interaction.member.voice.channel.userLimit === 0) return interaction.reply({ content: `${tmpvoiceIcons.downslot} Лимит участников достиг минимума!`, ephemeral: true });
 
 		interaction.member.voice.channel.edit({ userLimit: interaction.member.voice.channel.userLimit - 1 });
 		interaction.reply({ content: `${tmpvoiceIcons.downslot} Лимит участников успешно изменен!`, ephemeral: true });
@@ -127,7 +137,7 @@ module.exports = {
 
 		const membersArray = [];
 		interaction.member.voice.channel.members.forEach((member) => {
-			membersArray.push(`- ${userMention(member.id)} ${tempRoomRow.userID === member.id ? tmpvoiceIcons.owner : '\u200b'}\n`);
+			membersArray.push(`- ${userMention(member.id)} ${tempRoomRow.userID === member.id ? tmpvoiceIcons.owner : ' '}\n`);
 		});
 
 		const infoEmbed = new EmbedBuilder()
@@ -142,12 +152,20 @@ module.exports = {
 		return interaction.reply({ embeds: [infoEmbed], ephemeral: true });
 	}, voiceRoomsTemplateCallback: async function(interaction) {
 		const ownTeplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
+		const voiceChannel = interaction.member.voice.channel;
 
 		if (ownTeplateRow) {
-			return interaction.reply({ content: 'У вас уже создан шаблон. Вы не можете создать ещё', ephemeral: true });
+			const haveTemplateEmbed = new EmbedBuilder()
+				.setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
+				.addFields(
+					{ name: 'Настройки', value: `- Название: **${ownTeplateRow.channelName}**\n- Лимит участников: **${ownTeplateRow.channelLimit === 0 ? 'Без ограничений' : ownTeplateRow.channelLimit}**\n- Битрейт: **${ownTeplateRow.channelBitrate}**\n- Дата создания: ${time(new Date(ownTeplateRow.createdAt), 'R')}` },
+				)
+				.setThumbnail(interaction.member.displayAvatarURL())
+				.setFooter({ text: 'Нажмите на кнопку ниже, чтобы удалить тикет', ephemeral: true });
+
+			return interaction.reply({ content: 'У вас уже создан шаблон. Вы не можете создать ещё', ephemeral: true, embeds: [haveTemplateEmbed], components: [this.deleteTemplateButton()] });
 		}
 		else {
-			const voiceChannel = interaction.member.voice.channel;
 			const createTemplateEmbed = new EmbedBuilder()
 				.setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
 				.addFields(
@@ -155,7 +173,6 @@ module.exports = {
 				)
 				.setThumbnail(interaction.member.displayAvatarURL())
 				.setFooter({ text: 'Вы можете предложить другие параметры для хранения в шаблоне - @yacheru', ephemeral: true });
-
 			return interaction.reply({ content: 'У вас нет личных шаблонов. Желаете создать?', embeds: [createTemplateEmbed], ephemeral: true, components: [this.createTemplateButton()] });
 		}
 	}, voiceRoomsMoreCallback: function(interaction) {

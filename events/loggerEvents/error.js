@@ -4,6 +4,6 @@
 // module.exports = {
 // 	name: Events.Error,
 // 	async execute(error) {
-// 		errorLogger.error(error);
+// 		errorLogger.error(`${error.name}: ${error.message}`);
 // 	},
 // };

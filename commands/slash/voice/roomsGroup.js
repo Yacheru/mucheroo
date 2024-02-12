@@ -1,5 +1,6 @@
 const { SlashCommandBuilder, userMention } = require('discord.js');
 const { tempRooms } = require('../../../database/models');
+const { boostRoomControl } = require('../../../components/boostSystem/boostCommand');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -32,6 +33,24 @@ module.exports = {
                         .setName('member')
                         .setDescription('Выберите пользователя')
                         .setRequired(true)))
+        .addSubcommand((subcommand) =>
+            subcommand
+                .setName('boost')
+                .setDescription('Управление личной комнатой')
+                .addUserOption((option) =>
+                    option
+                        .setName('member')
+                        .setDescription('Выберите пользователя')
+                        .setRequired(true))
+                .addStringOption((option) =>
+                    option
+                        .setName('action')
+                        .setDescription('Укажите действие над пользователем')
+                        .addChoices(
+                            { name: 'Запретить', value: 'false' },
+                            { name: 'Открыть', value: 'true' },
+                        )
+                        .setRequired(true)))
         .setDMPermission(false),
     async execute(interaction) {
         const command = interaction.options.getSubcommand();
@@ -44,12 +63,14 @@ module.exports = {
         switch (command) {
             case 'access':
                 const action = interaction.options.getString('action') === 'true';
-                const messageReply = action === 'true' ? 'открыли' : 'закрыли';
+                const messageReply = action ? 'открыли' : 'закрыли';
                 interaction.member.voice.channel.permissionOverwrites.edit(member, { Connect: action });
                 return interaction.reply({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
             case 'owner':
                 await tempRooms.update({ userID: member.id }, { where: { userID: interaction.user.id } });
                 return interaction.reply({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
+            case 'boost':
+                return await boostRoomControl(interaction);
             default:
                 return;
         }

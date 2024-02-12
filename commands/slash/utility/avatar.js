@@ -12,6 +12,8 @@ module.exports = {
     execute(interaction) {
         const member = interaction.options.getMember('member') ?? interaction.member;
         const avatarEmbed = new EmbedBuilder()
+            .setTitle(interaction.displayName)
+            .setURL(member.displayAvatarURL())
             .setImage(member.displayAvatarURL({ size: 256 }));
         return interaction.reply({ embeds: [avatarEmbed] });
     },
