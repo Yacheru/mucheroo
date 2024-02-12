@@ -4,13 +4,10 @@ const { onBoostAdd, onBoostRemove } = require('../../components/boostSystem/onBo
 module.exports = {
     name: Events.GuildMemberUpdate,
     async execute(oldMember, newMember) {
-		// !oldMember.premiumSince && newMember.premiumSince
-		// oldMember.premiumSincee && !newMember.premiumSince
-
-        if (newMember.roles.cache.some((role) => role.id === '1159334533913661450')) {
+        if (!oldMember.premiumSince && newMember.premiumSince) {
 			return await onBoostAdd(newMember);
         }
-		else if (!newMember.roles.cache.some((role) => role.id === '1159334533913661450')) {
+		else if (oldMember.premiumSincee && !newMember.premiumSince) {
             return await onBoostRemove(newMember);
         }
     },
