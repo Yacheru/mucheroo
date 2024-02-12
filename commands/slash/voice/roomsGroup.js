@@ -65,10 +65,10 @@ module.exports = {
                 const action = interaction.options.getString('action') === 'true';
                 const messageReply = action ? 'открыли' : 'закрыли';
                 interaction.member.voice.channel.permissionOverwrites.edit(member, { Connect: action });
-                return interaction.reply({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.followUp({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
             case 'owner':
                 await tempRooms.update({ userID: member.id }, { where: { userID: interaction.user.id } });
-                return interaction.reply({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.followUp({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
             case 'boost':
                 return await boostRoomControl(interaction);
             default:
