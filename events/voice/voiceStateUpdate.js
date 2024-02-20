@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { checkNewState, checkOldState } = require('../../components/voiceRooms/voiceManage');
+const { checkNewState, checkOldState } = require('../../components/voiceRooms/voiceManager');
 
 module.exports = {
 	name: Events.VoiceStateUpdate,

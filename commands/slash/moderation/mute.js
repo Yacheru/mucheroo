@@ -24,14 +24,15 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
 		.setDMPermission(false),
 	async execute(interaction) {
+		await interaction.deferReply({ content: 'Пользователь наказывается...', ephemeral: true });
 		const member = interaction.options.getMember('member');
 		const reason = interaction.options.getString('reason') ?? 'Причина не указана.';
 		const muteTime = interaction.options.getString('time');
 		const timeValues = muteTime.match(/(\d+)([wdhms])/g);
 		let timeout = 0;
 
-		if (member.user.bot) return interaction.reply({ content: 'Никакие операции не могут быть выполнены над ботами!', ephemeral: true });
-		if (!timeValues) return interaction.reply({ content: 'Указан неверный формат времени.', ephemeral: true });
+		if (member.user.bot) return interaction.followUp({ content: 'Никакие операции не могут быть выполнены над ботами!', ephemeral: true });
+		if (!timeValues) return interaction.followUp({ content: 'Указан неверный формат времени.', ephemeral: true });
 
 		for (const value of timeValues) {
 			const amount = parseInt(value.slice(0, -1));
@@ -55,8 +56,8 @@ module.exports = {
 			}
 		}
 
-		if (member.isCommunicationDisabled()) return interaction.reply({ content: 'Участник уже наказан', ephemeral: true });
-		if (timeout >= 2_419_200_000) return interaction.reply({ content: 'Не указывайте 28 дней и более!', ephemeral: true });
+		if (member.isCommunicationDisabled()) return interaction.followUp({ content: 'Участник уже наказан', ephemeral: true });
+		if (timeout >= 2_419_200_000) return interaction.followUp({ content: 'Не указывайте 28 дней и более!', ephemeral: true });
 
 		const logChannel = interaction.guild.channels.cache.find((channel) => channel.name === channels.logschannel);
 		const creator = interaction.member;
@@ -79,7 +80,7 @@ module.exports = {
 			.setTimestamp();
 
 		await logChannel.send({ embeds: [muteEmbed] });
-		await interaction.reply({ content: `Пользователь ${member.displayName} успешно наказан по причине: **${reason}**`, ephemeral: true });
+		await interaction.followUp({ content: `Пользователь ${member.displayName} успешно наказан по причине: **${reason}**`, ephemeral: true });
 		await member.timeout(timeout);
 	},
 	async autocomplete(interaction) {

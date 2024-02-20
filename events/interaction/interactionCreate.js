@@ -19,7 +19,7 @@ module.exports = {
 			if (!command) return errorLogger.error(`[/] Команда с именем ${command.data.name} не найдена!`);
 
 			try {
-				if (command.data.name === 'room') {
+				if (command.data.name === 'room' && command.data.options[2].name !== 'boost') {
 					const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.member.id } });
 
 					if (!interaction.member.voice.channel) return interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
