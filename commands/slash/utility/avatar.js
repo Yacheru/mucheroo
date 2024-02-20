@@ -9,12 +9,12 @@ module.exports = {
                 .setName('member')
                 .setDescription('Укажите пользователя'))
         .setDMPermission(false),
-    execute(interaction) {
+    async execute(interaction) {
         const member = interaction.options.getMember('member') ?? interaction.member;
         const avatarEmbed = new EmbedBuilder()
-            .setTitle(interaction.displayName)
+            .setTitle(member.displayName)
             .setURL(member.displayAvatarURL())
             .setImage(member.displayAvatarURL({ size: 256 }));
-        return interaction.reply({ embeds: [avatarEmbed] });
+        await interaction.reply({ embeds: [avatarEmbed] });
     },
 };

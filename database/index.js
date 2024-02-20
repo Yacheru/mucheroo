@@ -1,10 +1,24 @@
 const { Sequelize } = require('sequelize');
-const { postgres } = require('../config.json');
+const { databases } = require('../config.json');
 
-const sequelize = new Sequelize(postgres.database, postgres.user, postgres.password, {
-	host: postgres.host,
+const sequelize = new Sequelize(databases.mucherooDB.database, databases.mucherooDB.user, databases.mucherooDB.password, {
+	host: databases.mucherooDB.host,
 	dialect: 'postgres',
 	logging: false,
 });
 
-module.exports = sequelize;
+const webapp = new Sequelize(databases.WebApplication.database, databases.WebApplication.user, databases.WebApplication.password, {
+	host: databases.WebApplication.host,
+	dialect: 'postgres',
+	logging: false,
+});
+
+
+const mysql = new Sequelize(databases.ReadRanks.database, databases.ReadRanks.user, databases.ReadRanks.password, {
+	host: databases.ReadRanks.host,
+	dialect: 'mysql',
+	logging: false,
+});
+
+
+module.exports = { sequelize, webapp, mysql };

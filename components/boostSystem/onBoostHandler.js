@@ -1,6 +1,6 @@
 const { PermissionFlagsBits, ChannelType } = require('discord.js');
 const { channels } = require('../../config.json');
-const { boostedMembers } = require('../../database/models');
+const { boostedMembers } = require('../../database/models/mucherooDB');
 const { boostEmbed } = require('./embeds');
 
 module.exports = {

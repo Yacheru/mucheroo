@@ -34,7 +34,7 @@ module.exports = {
 			format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
 			format.printf((info) => {
 				const { timestamp, level, message } = info;
-				return `[${timestamp}] [${level.toLocaleUpperCase()}] [POSTGRESQL] ${message}`;
+				return `[${timestamp}] [${level.toLocaleUpperCase()}] ${message}`;
 			}),
 		),
 		transports: [

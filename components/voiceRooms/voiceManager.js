@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { channels, roles } = require('../../config.json');
-const { tempRooms } = require('../../database/models');
+const { tempRooms } = require('../../database/models/mucherooDB');
 const { errorLogger } = require('../../logs/logger');
 
 const voiceArray = [];
@@ -45,7 +45,7 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     });
     voiceArray.push(channel.id);
     await member.voice.setChannel(channel);
-    await tempRooms.upsert({ userID: member.id, channelID: channel.id, adminRoom: isAdmin });
+    await tempRooms.upsert({ userID: member.id, channelID: channel.id, today: new Date(), adminRoom: isAdmin });
 }
 
 async function updatePermissions(channel, member) {

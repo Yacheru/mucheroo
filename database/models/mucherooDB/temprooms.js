@@ -1,5 +1,5 @@
-const db = require('../index.js');
-const { dbLogger } = require('../../logs/logger.js');
+const db = require('./../../index.js');
+const { dbLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 class tempRooms extends Model {
@@ -28,7 +28,7 @@ tempRooms.init(
 		},
 	},
 	{
-		sequelize: db,
+		sequelize: db.sequelize,
 		modelName: 'tempRooms',
 		timestamps: true,
 		updatedAt: false,

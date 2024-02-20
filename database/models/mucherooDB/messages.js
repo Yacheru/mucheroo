@@ -1,5 +1,5 @@
-const db = require('../index.js');
-const { dbLogger } = require('../../logs/logger.js');
+const db = require('./../../index.js');
+const { dbLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 
@@ -19,7 +19,7 @@ Messages.init(
 			defaultValue: 1,
 		},
 	}, {
-		sequelize: db,
+		sequelize: db.sequelize,
 		modelName: 'Messages',
 		hooks: {
 			afterCreate: (user, options) => {
