@@ -12,7 +12,7 @@ module.exports = {
             .setThumbnail(interaction.client.user.avatarURL())
             .setDescription('Этот дискорд бот создан, чтобы тихо существовать в фоне сервера, не привлекая излишнего внимания...')
             .setFields(
-                { name: 'Задержка', value: `- ${interaction.client.ws.ping}мс\n- ${send.createdTimestamp - interaction.createdTimestamp}мс` },
+                { name: 'Задержка', value: `- API: ${interaction.client.ws.ping}мс\n- BOT: ${send.createdTimestamp - interaction.createdTimestamp}мс` },
             )
             .setTimestamp()
             .setFooter({ text: 'developed by yacheru' });

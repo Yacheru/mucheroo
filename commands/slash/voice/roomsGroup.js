@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, userMention } = require('discord.js');
+const { SlashCommandBuilder, userMention, channelMention } = require('discord.js');
 const { tempRooms } = require('../../../database/models/mucherooDB');
 const { boostRoomControl } = require('../../../components/boostSystem/boostCommand');
 
