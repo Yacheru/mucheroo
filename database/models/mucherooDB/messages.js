@@ -1,5 +1,5 @@
 const db = require('./../../index.js');
-const { dbLogger } = require('../../../logs/logger.js');
+const { infoLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 
@@ -23,10 +23,10 @@ Messages.init(
 		modelName: 'Messages',
 		hooks: {
 			afterCreate: (user, options) => {
-				dbLogger.info(`[MESSAGES] Пользователь ${user.userID} занесен в таблицу.`);
+				infoLogger.info(`[MESSAGES] Пользователь ${user.userID} занесен в таблицу.`);
 			},
 			afterUpdate: (user, options) => {
-				dbLogger.info(`[MESSAGES] Пользователь ${user.userID} написал сообщение, новое количество сообщений - ${user.count}`);
+				infoLogger.info(`[MESSAGES] Пользователь ${user.userID} написал сообщение, новое количество сообщений - ${user.count}`);
 			},
 		},
 	},

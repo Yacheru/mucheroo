@@ -1,4 +1,4 @@
-const { errorLogger } = require('../../logs/logger');
+const { infoLogger } = require('../../logs/logger');
 
 const modalHandler = require('./modal.js');
 const buttonHandler = require('./buttons.js');
@@ -15,7 +15,7 @@ module.exports = {
             case 'deleteTicket':
                 return buttonHandler.deleteTicketButtonCallback(interaction);
             default:
-                return errorLogger.error(`[TICKET-SYSTEM] [BUTTONS] ID (${interaction.customId}) компонента не найден!`);
+                return infoLogger.error(`[TICKET-SYSTEM] [BUTTONS] ID (${interaction.customId}) компонента не найден!`);
         }
     },
     ticketSystemModalInteraction: function(interaction) {
@@ -25,7 +25,7 @@ module.exports = {
             case 'questionsModal':
                 return modalHandler.handleQuestionModalSubmit(interaction);
             default:
-                return errorLogger.error(`[TICKET-SYSTEM] [MODAL] ID (${interaction.customId}) компонента не найден!`);
+                return infoLogger.error(`[TICKET-SYSTEM] [MODAL] ID (${interaction.customId}) компонента не найден!`);
         }
     },
 };

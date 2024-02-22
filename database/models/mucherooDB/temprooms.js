@@ -1,5 +1,5 @@
 const db = require('./../../index.js');
-const { dbLogger } = require('../../../logs/logger.js');
+const { infoLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 class tempRooms extends Model {
@@ -34,13 +34,13 @@ tempRooms.init(
 		updatedAt: false,
 		hooks: {
 			afterCreate: (temprooms, options) => {
-				dbLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} создана`);
+				infoLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} создана`);
 			},
 			afterDestroy: (temprooms, options) => {
-				dbLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} удалена`);
+				infoLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} удалена`);
 			},
 			afterUpdate: (temprooms, options) => {
-				dbLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} обновлена`);
+				infoLogger.info(`[TEMPROOMS] ${ temprooms.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temprooms.channelID} пользователя ${temprooms.userID} обновлена`);
 			},
 		},
 	},

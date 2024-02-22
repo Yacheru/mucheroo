@@ -1,5 +1,5 @@
 const db = require('./../../index.js');
-const { dbLogger } = require('../../../logs/logger.js');
+const { infoLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 
@@ -25,7 +25,7 @@ boostedMembers.init(
 		modelName: 'boostedMembers',
 		hooks: {
 			afterCreate: (members, options) => {
-				dbLogger.info(`[BOOST] Пользователь ${members.userID} забустил сервер!`);
+				infoLogger.info(`[BOOST] Пользователь ${members.userID} забустил сервер!`);
 			},
 		},
 	},

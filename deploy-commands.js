@@ -1,6 +1,6 @@
 const { REST, Routes } = require('discord.js');
 const { clientId, token } = require('./config.json');
-const { errorLogger, infoLogger } = require('./logs/logger');
+const { infoLogger } = require('./logs/logger');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -40,6 +40,6 @@ const rest = new REST().setToken(token);
 		infoLogger.info(`[/] ${data.length} команд успешно перезагружены.`);
 	}
 	catch (error) {
-		errorLogger.error(error);
+		infoLogger.error(error);
 	}
 })();
