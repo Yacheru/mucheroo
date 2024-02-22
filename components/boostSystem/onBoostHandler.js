@@ -21,6 +21,11 @@ module.exports = {
                         deny: [PermissionFlagsBits.Connect],
                         allow: [],
                     },
+                    {
+                        id: newMember,
+                        deny: [],
+                        allow: [PermissionFlagsBits.Connect],
+                    },
                 ],
             });
         }
@@ -31,7 +36,7 @@ module.exports = {
 
         await boostedMembers.findOrCreate({ where: { userID: newMember.id }, defaults: { userID: newMember.id, channelID: voiceChannel.id, boostTime: Date.now() } });
         const boostChannel = await newMember.guild.channels.cache.get(channels.serverBoostChannel);
-		if (boostChannel) return boostChannel.send({ embeds: [boostEmbed(newMember, boosted, voiceChannel)] });
+		if (boostChannel) return boostChannel.send({ content: `<@${newMember.id}>`, embeds: [boostEmbed(newMember, boosted, voiceChannel)] });
     },
     onBoostRemove: async function(newMember) {
         await boostedMembers.destroy({ where: { userID: newMember.id } });

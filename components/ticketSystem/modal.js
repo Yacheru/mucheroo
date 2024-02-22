@@ -50,7 +50,7 @@ module.exports = {
 						.setCustomId('question')
 						.setLabel('Вопрос:')
 						.setStyle(TextInputStyle.Paragraph)
-						.setPlaceholder('Напиши ваш вопрос здесь')
+						.setPlaceholder('Напишите ваш вопрос здесь')
 						.setRequired(true)
 						.setMaxLength(2000),
 				),

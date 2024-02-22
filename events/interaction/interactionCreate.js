@@ -19,19 +19,10 @@ module.exports = {
 			if (!command) return errorLogger.error(`[/] Команда с именем ${command.data.name} не найдена!`);
 
 			try {
-				if (command.data.name === 'room') {
-					const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.member.id } });
-
-					if (!interaction.member.voice.channel) return interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
-					if (!tempRoomRow) return interaction.reply({ content: 'Вы не являетесь создателем комнаты!', ephemeral: true });
-
-					await command.execute(interaction);
-				}
-				else {
-					await command.execute(interaction);
-				}
+				await command.execute(interaction);
 			}
 			catch (error) {
+				await interaction.reply({ content: 'Ошибка при выполнении данной команды!', ephemeral: true });
 				errorLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
 			}
 		}

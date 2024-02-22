@@ -10,8 +10,8 @@ module.exports = {
 			}),
 		),
 		transports: [
-			new transports.Console(),
-			// new transports.File({ filename: './logs/info.log' }),
+			// new transports.Console(),
+			new transports.File({ filename: './logs/info.log' }),
 		],
 	}),
 
@@ -24,8 +24,8 @@ module.exports = {
 			}),
 		),
 		transports: [
-			new transports.Console(),
-			// new transports.File({ filename: './logs/errors.log' }),
+			// new transports.Console(),
+			new transports.File({ filename: './logs/errors.log' }),
 		],
 	}),
 
@@ -38,8 +38,8 @@ module.exports = {
 			}),
 		),
 		transports: [
-			new transports.Console(),
-			// new transports.File({ filename: './logs/database.log' }),
+			// new transports.Console(),
+			new transports.File({ filename: './logs/database.log' }),
 		],
 	}),
 };
