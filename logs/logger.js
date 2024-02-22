@@ -1,7 +1,14 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 
-fs.writeFile('info.log', '');
+fs.writeFile('info.log', '', (err) => {
+	if (err) {
+		console.error('[LOGGER] Ошибка при создании файла:', err);
+	}
+	else {
+		console.log('[LOGGER] Файл успешно создан!');
+	}
+});
 
 module.exports = {
 	infoLogger: createLogger({

@@ -20,15 +20,7 @@ module.exports = {
 				await command.execute(interaction);
 			}
 			catch (error) {
-<<<<<<< HEAD
-=======
-				// await interaction.reply({ content: 'Ошибка при выполнении данной команды!', ephemeral: true });
-<<<<<<< HEAD
->>>>>>> 527af869499b76617512b497e1ac1081a283a960
-				errorLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
-=======
 				infoLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
->>>>>>> 43c92c8594a9d8bc044639896fe9188d5056a93f
 			}
 		}
 		else if (interaction.isAutocomplete()) {
