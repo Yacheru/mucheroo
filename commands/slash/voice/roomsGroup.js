@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, userMention, channelMention } = require('discord.js');
 const { tempRooms } = require('../../../database/models/mucherooDB');
 const { boostRoomControl } = require('../../../components/boostSystem/boostCommand');
+const { channels } = require('../../../config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
