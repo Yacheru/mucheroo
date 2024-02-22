@@ -1,4 +1,4 @@
-const db = require('../index.js');
+const db = require('./../../index.js');
 // const { dbLogger } = require('../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
@@ -23,7 +23,7 @@ tempRoomsTemplate.init(
 		},
 	},
 	{
-		sequelize: db,
+		sequelize: db.sequelize,
 		modelName: 'tempRoomsTemplate',
 		timestamps: true,
 		updatedAt: false,

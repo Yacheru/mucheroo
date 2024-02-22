@@ -1,6 +1,6 @@
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, userMention } = require('discord.js');
 const { tmpvoiceIcons } = require('../../config.json');
-const { tempRoomsTemplate, tempRooms } = require('../../database/models');
+const { tempRoomsTemplate, tempRooms } = require('../../database/models/mucherooDB');
 
 module.exports = {
 	templateRooms: function() {

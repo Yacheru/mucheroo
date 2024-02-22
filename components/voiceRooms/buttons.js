@@ -1,5 +1,5 @@
 const { ButtonStyle, EmbedBuilder, ButtonBuilder, ActionRowBuilder, Collection, channelMention, time, userMention } = require('discord.js');
-const { tempRooms, tempRoomsTemplate } = require('../../database/models');
+const { tempRooms, tempRoomsTemplate } = require('../../database/models/mucherooDB');
 const { channels, tmpvoiceIcons } = require('../../config.json');
 
 const privateCollection = new Collection();

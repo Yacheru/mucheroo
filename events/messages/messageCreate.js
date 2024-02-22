@@ -1,6 +1,6 @@
 const { Events, PermissionsBitField } = require('discord.js');
 const { errorLogger } = require('../../logs/logger');
-const { Messages } = require('../../database/models');
+const { Messages } = require('../../database/models/mucherooDB');
 const { prefix } = require('../../config.json');
 
 module.exports = {

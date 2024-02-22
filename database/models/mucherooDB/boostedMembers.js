@@ -1,5 +1,5 @@
-const db = require('../index.js');
-const { dbLogger } = require('../../logs/logger.js');
+const db = require('./../../index.js');
+const { dbLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 
@@ -21,7 +21,7 @@ boostedMembers.init(
 			type: DataTypes.BIGINT,
 		},
 	}, {
-		sequelize: db,
+		sequelize: db.sequelize,
 		modelName: 'boostedMembers',
 		hooks: {
 			afterCreate: (members, options) => {

@@ -1,5 +1,6 @@
 const { Events } = require('discord.js');
-const { checkNewState, checkOldState } = require('../../components/voiceRooms/voiceManage');
+const { checkNewState, checkOldState } = require('../../components/voiceRooms/voiceManager');
+const { onVoiceChannelConnect, onVoiceChannelLeave } = require('../../components/voiceActivity/voiceState');
 
 module.exports = {
 	name: Events.VoiceStateUpdate,
@@ -10,9 +11,11 @@ module.exports = {
 
 		if (newChannel) {
 			await checkNewState(newChannel, member);
+			await onVoiceChannelConnect(newState);
 		}
 		if (oldChannel) {
 			await checkOldState(oldChannel);
+			await onVoiceChannelLeave(newState);
 		}
     },
 };

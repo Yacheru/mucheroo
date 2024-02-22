@@ -1,4 +1,4 @@
-const db = require('../index.js');
+const db = require('./../../index.js');
 const { Model, DataTypes } = require('sequelize');
 
 class warns extends Model {
@@ -17,7 +17,7 @@ warns.init(
 		},
 	},
 	{
-		sequelize: db,
+		sequelize: db.sequelize,
 		modelName: 'warns',
 	},
 );

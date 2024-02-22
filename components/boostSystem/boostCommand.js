@@ -1,5 +1,5 @@
 const { userMention } = require('discord.js');
-const { boostedMembers } = require('../../database/models');
+const { boostedMembers } = require('../../database/models/mucherooDB');
 
 module.exports = {
     boostRoomControl: async function(interaction) {

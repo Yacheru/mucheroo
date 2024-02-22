@@ -1,6 +1,6 @@
 const { channelMention } = require('discord.js');
 const { channels } = require('../../config.json');
-const { tempRooms } = require('../../database/models');
+const { tempRooms } = require('../../database/models/mucherooDB');
 const { errorLogger } = require('../../logs/logger');
 
 const modalHandler = require('./modal.js');

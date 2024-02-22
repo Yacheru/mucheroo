@@ -1,6 +1,6 @@
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, userMention } = require('discord.js');
 const { icons } = require('../config.json');
-const { warns } = require('../database/models');
+const { warns } = require('../database/models/mucherooDB');
 
 module.exports = {
 	warnTakeSelect: function(interaction, warnsrow, memberid) {

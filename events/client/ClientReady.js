@@ -1,29 +1,50 @@
 const { Events } = require('discord.js');
 const { dbLogger, infoLogger } = require('../../logs/logger.js');
-const db = require('../../database/index.js');
-const models = require('../../database/models/index.js');
-
+const mModels = require('../../database/models/mucherooDB/index.js');
+const wModels = require('../../database/models/webApplication/index.js');
+const lModels = require('../../database/models/level_ranks/index.js');
 
 module.exports = {
-	name: Events.ClientReady,
-	once: true,
-	execute(client) {
-		try {
-			dbLogger.info('[CONNECTION] Установка соединения...');
+    name: Events.ClientReady,
+    once: true,
+    async execute(client) {
+        try {
+            dbLogger.info('[CONNECTION] Установка соединения...');
 
-			Object.keys(models).forEach((ele) => {
-				dbLogger.info(`[TABLES] Регистрация таблицы: ${ele}...`),
-				models[ele].associate(models);
-			});
-			db.sync({ force: false });
-		}
+            // Синхронизация моделей MucherooDB
+            for (const model of Object.values(mModels)) {
+                dbLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
+                await model.sync({ force: false });
+                if (typeof model.associate === 'function') {
+                    model.associate(mModels);
+                }
+            }
+
+            // Синхронизация моделей Web Application
+            for (const model of Object.values(wModels)) {
+                dbLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
+                await model.sync({ force: false });
+                if (typeof model.associate === 'function') {
+                    model.associate(wModels);
+                }
+            }
+
+            // Синхронизация моделей Level Ranks
+            for (const model of Object.values(lModels)) {
+                dbLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
+                await model.sync({ force: false });
+                if (typeof model.associate === 'function') {
+                    model.associate(lModels);
+                }
+            }
+
+            dbLogger.info('[SYCHRONIZATION] Синхронизация завершена.');
+        }
 		catch (error) {
-			dbLogger.error('[SYCHRONIZATION] Ошибка синхроницазии!', error);
-		}
+            dbLogger.error('[SYCHRONIZATION] Ошибка синхронизации!', error);
+        }
 		finally {
-			dbLogger.info('[SYCHRONIZATION] Синхронизация закончена.');
-		}
-
-		infoLogger.info(`[${client.user.displayName.toUpperCase()}] ${client.user.tag} Готов!`);
-	},
+            infoLogger.info(`[${client.user.displayName.toUpperCase()}] ${client.user.tag} Готов!`);
+        }
+    },
 };

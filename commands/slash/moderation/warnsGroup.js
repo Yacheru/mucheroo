@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { warns } = require('../../../database/models');
+const { warns } = require('../../../database/models/mucherooDB');
 const { v4: uuidv4 } = require('uuid');
 const selectMenuHandler = require('../../../handlers/selectMenuHandler');
 

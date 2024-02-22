@@ -1,6 +1,4 @@
-const { Events, InteractionType, channelMention } = require('discord.js');
-const { channels } = require('../../config.json');
-const { tempRooms } = require('../../database/models');
+const { Events, InteractionType } = require('discord.js');
 const { errorLogger } = require('../../logs/logger');
 const { temprooms, ticketsystem } = require('../../components/customIds.json');
 
@@ -22,7 +20,10 @@ module.exports = {
 				await command.execute(interaction);
 			}
 			catch (error) {
-				await interaction.reply({ content: 'Ошибка при выполнении данной команды!', ephemeral: true });
+<<<<<<< HEAD
+=======
+				// await interaction.reply({ content: 'Ошибка при выполнении данной команды!', ephemeral: true });
+>>>>>>> 527af869499b76617512b497e1ac1081a283a960
 				errorLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
 			}
 		}
