@@ -7,6 +7,10 @@ const { connections } = require('../../database/models/webApplication');
 module.exports = {
     profileCommand: async function(interaction) {
         await interaction.deferReply({ ephemeral: true });
+        const onDeveloped = false;
+
+        if (onDeveloped) return interaction.editReply({ content: 'Данный компонет ещё в разработке...', ephemeral: true });
+
         const member = interaction.options.getMember('member') ?? interaction.member;
 
         const connectionsRow = await connections.findByPk(member.id);
