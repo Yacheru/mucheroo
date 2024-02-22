@@ -34,7 +34,7 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
         { id: guild.roles.everyone, deny: [PermissionFlagsBits.Connect] },
         { id: roles.admin, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Stream, PermissionFlagsBits.Connect] },
     ] : [
-        { id: member, allow: [PermissionFlagsBits.Connect, PermissionFlagsBits.ManageChannels] },
+        { id: member, allow: [PermissionFlagsBits.Connect, PermissionFlagsBits.SendMessages, PermissionFlagsBits.AttachFiles] },
     ];
     const channel = await guild.channels.create({
         name: member.displayName,
