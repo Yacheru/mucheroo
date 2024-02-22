@@ -1,7 +1,7 @@
 const { channelMention } = require('discord.js');
 const { channels } = require('../../config.json');
 const { tempRooms } = require('../../database/models/mucherooDB');
-const { errorLogger } = require('../../logs/logger');
+const { infoLogger } = require('../../logs/logger');
 
 const modalHandler = require('./modal.js');
 const buttonHandler = require('./buttons.js');
@@ -50,7 +50,7 @@ module.exports = {
             case 'more':
                 return buttonHandler.voiceRoomsMoreCallback(interaction);
             default:
-                return errorLogger.error(`[TEMP-ROOMS] [BUTTONS] ID (${interaction.customId}) компонента не найден!`);
+                return infoLogger.error(`[TEMP-ROOMS] [BUTTONS] ID (${interaction.customId}) компонента не найден!`);
         }
     },
     tempRoomsModalInteraction: function(interaction) {
@@ -60,7 +60,7 @@ module.exports = {
             case 'limitModal':
                 return modalHandler.tempRoomsLimitModalCallback(interaction);
             default:
-                return errorLogger.error(`[TEMP-ROOMS] [MODAL] ID (${interaction.customId}) компонента не найден!`);
+                return infoLogger.error(`[TEMP-ROOMS] [MODAL] ID (${interaction.customId}) компонента не найден!`);
         }
     },
     tempRoomsSelectMenuInteraction: function(interaction) {
@@ -74,7 +74,7 @@ module.exports = {
                 if (!interaction.member.voice.channel) return interaction.reply({ content: `Вы не находитесь в голосовом канале - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
                 return selectMenuHandler.bitrateChangeCallback(interaction);
             default:
-                return errorLogger.error(`[TEMP-ROOMS] [SELECT-MENU] ID (${interaction.customId}) компонента не найден!`);
+                return infoLogger.error(`[TEMP-ROOMS] [SELECT-MENU] ID (${interaction.customId}) компонента не найден!`);
         }
     },
 };

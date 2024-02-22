@@ -1,7 +1,5 @@
-const cron = require('node-cron');
 const db = require('./../../index.js');
 const { Model, DataTypes } = require('sequelize');
-const { errorLogger } = require('../../../logs/logger.js');
 
 class voiceActivity extends Model {
 	static associate() {}
@@ -31,24 +29,5 @@ voiceActivity.init(
 		modelName: 'voiceActivity',
 	},
 );
-
-
-cron.schedule('0 0 * * *', async () => {
-	try {
-		return await voiceActivity.update({ today: 0 });
-	}
-	catch (error) {
-		errorLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в сутки:', error);
-	}
-});
-
-cron.schedule('0 0 * * 0', async () => {
-	try {
-		return await voiceActivity.update({ week: 0 });
-	}
-	catch (error) {
-		errorLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в неделю:', error);
-	}
-});
 
 module.exports = voiceActivity;

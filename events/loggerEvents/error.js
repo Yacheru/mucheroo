@@ -1,9 +1,9 @@
 // const { Events } = require('discord.js');
-// const { errorLogger } = require('../../logs/logger');
+// const { infoLogger } = require('../../logs/logger');
 
 // module.exports = {
 // 	name: Events.Error,
 // 	async execute(error) {
-// 		errorLogger.error(`${error.name}: ${error.message}`);
+// 		infoLogger.error(`${error.name}: ${error.message}`);
 // 	},
 // };

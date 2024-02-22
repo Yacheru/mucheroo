@@ -2,7 +2,7 @@
 const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { channels, roles } = require('../../config.json');
 const { tempRooms } = require('../../database/models/mucherooDB');
-const { errorLogger } = require('../../logs/logger');
+const { infoLogger } = require('../../logs/logger');
 
 const voiceArray = [];
 
@@ -70,6 +70,6 @@ async function deleteTempRoom(channel) {
         }
     }
     catch (error) {
-        errorLogger.error('[TEMP-ROOMS] Ошибка при удалении комнаты', error);
+        infoLogger.error('[TEMP-ROOMS] Ошибка при удалении комнаты', error);
     }
 }

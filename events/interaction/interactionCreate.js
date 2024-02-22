@@ -1,5 +1,5 @@
 const { Events, InteractionType } = require('discord.js');
-const { errorLogger } = require('../../logs/logger');
+const { infoLogger } = require('../../logs/logger');
 const { temprooms, ticketsystem } = require('../../components/customIds.json');
 
 const selectMenuHandler = require('../../handlers/selectMenuHandler');
@@ -14,7 +14,7 @@ module.exports = {
 		if (interaction.isChatInputCommand()) {
 			const command = interaction.client.commands.get(interaction.commandName);
 
-			if (!command) return errorLogger.error(`[/] Команда с именем ${command.data.name} не найдена!`);
+			if (!command) return infoLogger.error(`[/] Команда с именем ${command.data.name} не найдена!`);
 
 			try {
 				await command.execute(interaction);
@@ -23,8 +23,12 @@ module.exports = {
 <<<<<<< HEAD
 =======
 				// await interaction.reply({ content: 'Ошибка при выполнении данной команды!', ephemeral: true });
+<<<<<<< HEAD
 >>>>>>> 527af869499b76617512b497e1ac1081a283a960
 				errorLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
+=======
+				infoLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
+>>>>>>> 43c92c8594a9d8bc044639896fe9188d5056a93f
 			}
 		}
 		else if (interaction.isAutocomplete()) {
@@ -33,7 +37,7 @@ module.exports = {
 				await command.autocomplete(interaction);
 			}
 			catch (error) {
-				errorLogger.error(error);
+				infoLogger.error(error);
 			}
 		}
 		else if (interaction.isButton()) {
@@ -44,7 +48,7 @@ module.exports = {
 				return ticketSystemButtonInteraction(interaction);
 			}
 			else {
-				return errorLogger.error(`[BUTTON] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
+				return infoLogger.error(`[BUTTON] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
 			}
 		}
 		else if (interaction.type === InteractionType.ModalSubmit) {
@@ -55,7 +59,7 @@ module.exports = {
 				return ticketSystemModalInteraction(interaction);
 			}
 			else {
-				return errorLogger.error(`[MODAL] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
+				return infoLogger.error(`[MODAL] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
 			}
 		}
 		else if (interaction.isStringSelectMenu()) {
@@ -67,7 +71,7 @@ module.exports = {
 					case 'warnTakeSelect':
 						return selectMenuHandler.warnTakeSelectCallback(interaction);
 					default:
-						return errorLogger.error(`[SELECT-MENU] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
+						return infoLogger.error(`[SELECT-MENU] ID (${interaction.customId}) компонента не найден ни в одном из компонентов!`);
 				}
 			}
 		}

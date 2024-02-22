@@ -1,5 +1,5 @@
 const db = require('./../../index.js');
-// const { dbLogger } = require('../../logs/logger.js');
+// const { infoLogger } = require('../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
 class tempRoomsTemplate extends Model {
@@ -29,10 +29,10 @@ tempRoomsTemplate.init(
 		updatedAt: false,
 		// hooks: {
 		// 	afterCreate: (temproomsTemplate, options) => {
-		// 		dbLogger.info(`[TEMPROOMS] ${ temproomsTemplate.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temproomsTemplate.channelID} пользователя ${temproomsTemplate.userID} создана`);
+		// 		infoLogger.info(`[TEMPROOMS] ${ temproomsTemplate.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temproomsTemplate.channelID} пользователя ${temproomsTemplate.userID} создана`);
 		// 	},
 		// 	afterDestroy: (temproomsTemplate, options) => {
-		// 		dbLogger.info(`[TEMPROOMS] ${ temproomsTemplate.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temproomsTemplate.channelID} пользователя ${temproomsTemplate.userID} удалена`);
+		// 		infoLogger.info(`[TEMPROOMS] ${ temproomsTemplate.adminRoom ? 'Комната администратора' : 'Пользовательская комната' } ${temproomsTemplate.channelID} пользователя ${temproomsTemplate.userID} удалена`);
 		// 	},
 		// },
 	},
