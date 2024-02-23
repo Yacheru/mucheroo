@@ -13,6 +13,6 @@ module.exports = {
         const messageReply = action ? 'открыли' : 'закрыли';
 
         channel.permissionOverwrites.edit(member, { Connect: action });
-        return await interaction.followUp({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
+        return await interaction.followUp({ content: `Вы успешно **${messageReply}** комнату пользователю ${userMention(member.id)}`, ephemeral: true });
     },
 };
