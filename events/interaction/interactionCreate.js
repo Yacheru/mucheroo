@@ -17,7 +17,7 @@ module.exports = {
 			if (!command) return infoLogger.error(`[/] Команда с именем ${command.data.name} не найдена!`);
 
 			try {
-				if (command.onDeveloped) return interaction.reply({ content: 'Данный компонент ещё в разработке...', ephemeral: true });
+				if (command.onDeveloped) return interaction.reply({ content: 'Данная команда ещё в разработке...', ephemeral: true });
 
 				await command.execute(interaction);
 			}
