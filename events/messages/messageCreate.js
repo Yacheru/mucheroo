@@ -7,6 +7,7 @@ module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
 		await message.guild.members.fetch();
+		const member = message.guild.members.cache.get(message.author.id);
 
 		const userRow = await Messages.findOne({ where: { userID: member.id } });
 
@@ -17,7 +18,6 @@ module.exports = {
 			await Messages.create({ userID: member.id });
 		}
 
-		const member = message.guild.members.cache.get(message.author.id);
 		const args = message.content.slice(prefix.length).trim().split(/ +/);
 		const commandName = args.shift().toLowerCase();
 		const command = message.client.prefix.get(commandName);
