@@ -48,7 +48,7 @@ module.exports = {
         try {
             infoLogger.info('[TASKS] Запуск задач...');
             await dayTask(client);
-            weekTask();
+            await weekTask(client);
             infoLogger.info('[TASKS] Успешный запуск задач!');
         }
         catch (error) {

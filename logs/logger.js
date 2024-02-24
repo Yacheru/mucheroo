@@ -10,8 +10,8 @@ module.exports = {
 			}),
 		),
 		transports: [
-			// new transports.Console(),
-			new transports.File({ filename: './logs/info.log' }),
+			new transports.Console(),
+			// new transports.File({ filename: './logs/info.log' }),
 		],
 	}),
 };

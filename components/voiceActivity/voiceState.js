@@ -12,6 +12,39 @@ function timeInVoice(time) {
     return `${h} ч. ${m} мин.`;
 }
 
+async function sendActivityEmbed(client, title, queryCondition, errorMessage, time) {
+    const ActivityEmbed = new EmbedBuilder()
+        .setTitle(title)
+        .setImage(images.transperentImage)
+        .setTimestamp();
+
+    try {
+        const activityRows = await voiceActivity.findAll({ where: queryCondition, limit: 10, order: [['today', 'DESC']] });
+        const channel = client.channels.cache.get('1205814495415373876');
+
+        let userRow = '';
+        let i = 1;
+
+        if (activityRows.length > 0) {
+            for (const row of activityRows) {
+                userRow += `${i}) ${userMention(row.userID)} ${timeInVoice(time === 'day' ? row.day : row.week)}\n`;
+                i++;
+            }
+        }
+        else {
+            userRow += errorMessage;
+        }
+
+        ActivityEmbed.setDescription(userRow).setColor(Colors.Blue);
+        return await channel.send({ embeds: [ActivityEmbed] });
+    }
+    catch (error) {
+        infoLogger.error(`Произошла ошибка при получении активности (${title}):`, error);
+        ActivityEmbed.setDescription(`Произошла ошибка при получении активности (${title}) :(`).setColor(Colors.Red);
+        return await channel.send({ embeds: [ActivityEmbed] });
+    }
+}
+
 module.exports = {
     onVoiceChannelConnect: async function(member) {
         try {
@@ -36,36 +69,11 @@ module.exports = {
         }
     },
 
-    actvityin24h: async function(client) {
-        const ActivityEmbed = new EmbedBuilder()
-            .setTitle('Активность за 24 часа')
-            .setImage(images.transperentImage)
-            .setTimestamp();
+    activityin24h: async function(client) {
+        return await sendActivityEmbed(client, 'Голосовая активность за 24 часа', { today: { [Op.gt]: 60 } }, 'Голосовая активность за 24 часа отсутствует :(', 'day');
+    },
 
-        try {
-            const activityRows = await voiceActivity.findAll({ where: { today: { [Op.gt]: 60 } }, limit: 10, order: [['today', 'DESC']] });
-            const channel = client.channels.cache.get('1205814495415373876');
-
-            let userRow = '';
-            let i = 1;
-
-            if (activityRows.length > 0) {
-                for (const row of activityRows) {
-                    userRow += `${i}) ${userMention(row.userID)} ${timeInVoice(row.today)}\n`;
-                    i++;
-                }
-            }
-            else {
-                userRow += 'Голосовая активность за 24 часа отсутствует :(';
-            }
-
-            ActivityEmbed.setDescription(userRow).setColor(Colors.Blue);
-            return await channel.send({ embeds: [ActivityEmbed] });
-        }
-        catch (error) {
-            infoLogger.error('Произошла ошибка при получении активности за 24 часа:', error);
-            ActivityEmbed.setDescription('Произошла ошибка при получении активности за 24 часа :(').setColor(Colors.Red);
-            return await channel.send({ embeds: [ActivityEmbed] });
-        }
+    activityin7days: async function(client) {
+        return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { today: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
     },
 };

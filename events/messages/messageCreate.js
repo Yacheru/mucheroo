@@ -19,6 +19,7 @@ module.exports = {
 
 		if (userRow) {
 			await userRow.increment('count');
+			infoLogger.info(`[MESSAGES] Пользователь ${user.userID} написал сообщение, новое количество сообщений - ${userRow.count}`);
 		}
 		else {
 			await Messages.create({ userID: message.author.id });
