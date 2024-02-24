@@ -58,27 +58,28 @@ module.exports = {
         const member = interaction.options.getMember('member');
         const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.member.id } });
 
-        if (!member) return interaction.reply({ content: 'Не удалось найти указанного пользователя.', ephemeral: true });
-        if (member.user.bot) return interaction.reply({ content: 'Не указывайте ботов.', ephemeral: true });
-        if (member.id === interaction.member.id) return interaction.reply({ content: 'Не указывайте взаимодействие на себе.', ephemeral: true });
+        if (!member || member.user.bot || member.id === interaction.member.id) {
+            return interaction.reply({ content: 'Некорректный пользователь.', ephemeral: true });
+        }
+
+        if (!interaction.member.voice.channel && command !== 'boost') {
+            return interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+        }
+
+        if (!tempRoomRow && command !== 'boost') {
+            return interaction.reply({ content: 'Вы не являетесь создателем комнаты!', ephemeral: true });
+        }
 
         switch (command) {
             case 'access':
                 const action = interaction.options.getString('action') === 'true';
                 const messageReply = action ? 'открыли' : 'закрыли';
 
-                if (!interaction.member.voice.channel) return await interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
-                if (!tempRoomRow) return await interaction.reply({ content: 'Вы не являетесь создателем комнаты!', ephemeral: true });
-
                 interaction.member.voice.channel.permissionOverwrites.edit(member, { Connect: action });
-                return interaction.followUp({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.reply({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
             case 'owner':
-
-                if (!interaction.member.voice.channel) return await interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
-                if (!tempRoomRow) return await interaction.reply({ content: 'Вы не являетесь создателем комнаты!', ephemeral: true });
-
                 await tempRooms.update({ userID: member.id }, { where: { userID: interaction.user.id } });
-                return interaction.followUp({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.reply({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
             case 'boost':
                 return await boostRoomControl(interaction);
         }
