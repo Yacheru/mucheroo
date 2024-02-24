@@ -15,7 +15,6 @@ Messages.init(
 		},
 		count: {
 			type: DataTypes.INTEGER,
-			unique: true,
 			defaultValue: 1,
 		},
 	}, {
