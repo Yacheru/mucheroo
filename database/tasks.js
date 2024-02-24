@@ -4,7 +4,7 @@ const { actvityin24h } = require('../components/voiceActivity/voiceState.js');
 
 
 module.exports = {
-    dayTask: async function() {
+    dayTask: async function(client) {
         cron.schedule('0 0 * * *', async () => {
             try {
                 await actvityin24h(client);
