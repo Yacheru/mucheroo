@@ -12,25 +12,25 @@ module.exports = {
         cron.schedule('0 0 * * *', async () => {
             try {
                 await activityin24h(client);
-                return await voiceActivity.update({ today: 0 });
+                return await voiceActivity.update({ today: 0 }, { where: {} });
             }
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в сутки:', error);
             }
         },
-            {
-                timezone: 'Europe/Moscow',
-            },
+        {
+            timezone: 'Europe/Moscow',
+        },
         );
     },
 
-    weekTask: function(client) {
+    weekTask: async function(client) {
         infoLogger.info('[TASKS] Запуск еженедельной задачи...');
 
         cron.schedule('0 0 * * 0', async () => {
             try {
                 await activityin7days(client);
-                return await voiceActivity.update({ week: 0 });
+                return await voiceActivity.update({ today: 0 }, { where: {} });
             }
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в неделю:', error);
