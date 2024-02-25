@@ -22,7 +22,13 @@ module.exports = {
 				await command.execute(interaction);
 			}
 			catch (error) {
-				infoLogger.log(`Ошибка выполнения ${command.data.name}\n${error}`);
+				infoLogger.info(`Ошибка выполнения ${command.data.name}\n${error}`);
+				if (command.defered) {
+					return interaction.editReply({ content: 'Ошибка при выполении команды!' });
+				}
+				else {
+					return interaction.reply({ content: 'Ошибка при выполении команды!', ephemeral: true });
+				}
 			}
 		}
 		else if (interaction.isAutocomplete()) {

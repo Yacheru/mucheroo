@@ -17,6 +17,6 @@ module.exports = {
 			});
 		}
 
-		channel.send(msg);
+		await channel.send(msg);
 	},
 };

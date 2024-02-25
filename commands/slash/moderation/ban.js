@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, userMention } = 
 const { channels, icons, images } = require('../../../config.json');
 
 module.exports = {
+	defered: false,
 	data: new SlashCommandBuilder()
 		.setName('ban')
 		.setDescription('Забанить участника')

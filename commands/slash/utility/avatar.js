@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
+    defered: false,
     data: new SlashCommandBuilder()
         .setName('avatar')
         .setDescription('Посмотреть аватарку пользователя')

@@ -12,9 +12,9 @@ module.exports = {
         const privateRoomsNoVoiceCustomIDs = ['upslot', 'hide', 'private', 'access', 'voice', 'downslot', 'limit', 'name', 'owner', 'info', 'templateButton'];
 
         if (privateRoomsNoVoiceCustomIDs.includes(interaction.customId)) {
-            const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.user.id } });
-
             if (!interaction.member.voice.channel) return interaction.reply({ content: `Вы не находитесь в голосовом канале - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+
+            const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.user.id } });
             if (!tempRoomRow) return interaction.reply({ content: 'Вы не являетесь создателем комнаты.', ephemeral: true });
         }
 

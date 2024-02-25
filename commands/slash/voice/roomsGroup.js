@@ -4,6 +4,7 @@ const { boostRoomControl } = require('../../../components/boostSystem/boostComma
 const { channels } = require('../../../config.json');
 
 module.exports = {
+    defered: false,
     data: new SlashCommandBuilder()
         .setName('room')
         .setDescription('Дополнительная настройка вашей комнаты')

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, Colors, userMention, time, ChannelTyp
 const { roles, images } = require('../../../config.json');
 
 module.exports = {
+    defered: false,
     data: new SlashCommandBuilder()
         .setName('server')
         .setDescription('Выводит информацию о сервере')

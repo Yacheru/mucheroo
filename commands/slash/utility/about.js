@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
+    defered: false,
     data: new SlashCommandBuilder()
         .setName('about')
         .setDescription('Информация о боте')
@@ -17,6 +18,6 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: 'developed by yacheru' });
 
-        return interaction.editReply({ embeds: [botInfoEmbed], ephemeral: true });
+        return interaction.editReply({ content: '', embeds: [botInfoEmbed], ephemeral: true });
     },
 };

@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, userMention, tim
 const { channels, icons, images } = require('../../../config.json');
 
 module.exports = {
+	defered: true,
 	data: new SlashCommandBuilder()
 		.setName('mute')
 		.setDescription('Выдать Тайм-Аут')
