@@ -4,6 +4,7 @@ const { dayTask, weekTask } = require('../../database/tasks.js');
 const mModels = require('../../database/models/mucherooDB/index.js');
 const wModels = require('../../database/models/webApplication/index.js');
 const lModels = require('../../database/models/level_ranks/index.js');
+const { monitoringUpdate } = require('../../database/tasks');
 
 module.exports = {
     name: Events.ClientReady,
@@ -49,6 +50,7 @@ module.exports = {
             infoLogger.info('[TASKS] Запуск задач...');
             await dayTask(client);
             await weekTask(client);
+            await monitoringUpdate(client);
 
             infoLogger.info('[TASKS] Успешный запуск задач!');
         }

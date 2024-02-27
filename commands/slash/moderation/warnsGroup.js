@@ -5,6 +5,7 @@ const selectMenuHandler = require('../../../handlers/selectMenuHandler');
 
 
 module.exports = {
+	deferred: false,
 	data: new SlashCommandBuilder()
 		.setName('warn')
 		.setDescription('Управления предупреждениями.')

@@ -76,4 +76,5 @@ module.exports = {
     activityin7days: async function(client) {
         return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { today: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
     },
+    timeInVoice,
 };

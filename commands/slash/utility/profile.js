@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { profileCommand } = require('../../../components/profile/command');
 
 module.exports = {
-    defered: true,
+    deferred: true,
     onDeveloped: true,
     data: new SlashCommandBuilder()
         .setName('profile')

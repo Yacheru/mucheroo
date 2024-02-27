@@ -5,6 +5,7 @@ const warns = require('./warns');
 const boostedMembers = require('./boostedMembers');
 const voiceActivity = require('./voiceActivity');
 const voiceState = require('./voiceState');
+const Monitoring = require('./monitoring');
 
 module.exports = {
 	Messages,
@@ -14,4 +15,5 @@ module.exports = {
 	boostedMembers,
 	voiceActivity,
 	voiceState,
+	Monitoring,
 };

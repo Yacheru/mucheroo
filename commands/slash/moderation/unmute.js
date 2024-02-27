@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, userMention } = require('discord.js');
 
 module.exports = {
+	deferred: false,
 	data: new SlashCommandBuilder()
 		.setName('unmute')
 		.setDescription('Снять Тайм-Аут с участника')

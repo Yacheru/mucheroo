@@ -23,7 +23,7 @@ module.exports = {
 			}
 			catch (error) {
 				infoLogger.info(`Ошибка выполнения ${command.data.name}\n${error}`);
-				if (command.defered) {
+				if (command.deferred) {
 					return interaction.editReply({ content: 'Ошибка при выполении команды!' });
 				}
 				else {

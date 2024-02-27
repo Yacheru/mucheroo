@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
+    deferred: false,
     data: new SlashCommandBuilder()
         .setName('clear')
         .setDescription('Массовое удаление сообщений')

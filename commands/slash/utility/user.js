@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, roleMention, time } = require('discor
 const { images } = require('../../../config.json');
 
 module.exports = {
-    defered: false,
+    deferred: false,
     data: new SlashCommandBuilder()
         .setName('user')
         .setDescription('Выводит информацию о пользователе')

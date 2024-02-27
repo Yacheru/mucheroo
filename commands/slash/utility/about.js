@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    defered: false,
+    deferred: false,
     data: new SlashCommandBuilder()
         .setName('about')
         .setDescription('Информация о боте')

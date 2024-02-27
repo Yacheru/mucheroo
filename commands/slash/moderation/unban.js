@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits, userMention } = require('discord.js');
 
 module.exports = {
-	defered: true,
+	deferred: true,
 	data: new SlashCommandBuilder()
 		.setName('unban')
 		.setDescription('Разблокировать пользователя на сервере')

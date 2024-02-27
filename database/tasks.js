@@ -3,6 +3,8 @@ const cron = require('node-cron');
 const { voiceActivity } = require('../database/models/mucherooDB/');
 const { activityin24h, activityin7days } = require('../components/voiceActivity/voiceState.js');
 const { infoLogger } = require('../logs/logger.js');
+const { Monitoring } = require('./models/mucherooDB');
+const { fetchData } = require('../components/monitoring/states');
 
 
 module.exports = {
@@ -40,5 +42,15 @@ module.exports = {
                 timezone: 'Europe/Moscow',
             },
         );
+    },
+    monitoringUpdate: async function(client) {
+        cron.schedule('* * * * *', async () => {
+            (await Monitoring.findAll({ where: {} }))
+                .forEach((row) => {
+                    fetchData(client, row)
+                        .then()
+                        .catch((error) => infoLogger.error(`[MONITORING] Ошибка выполнения обновления ${error}`));
+                });
+        });
     },
 };
