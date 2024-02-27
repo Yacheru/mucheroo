@@ -8,7 +8,7 @@ module.exports = {
 	async execute(message) {
 		await message.guild.members.fetch();
 
-		if (message.channel.id !== '1146227727431634975') {
+		if (message.channel.id === '1146227727431634975') {
 			return await message.react('👍');
 		}
 
