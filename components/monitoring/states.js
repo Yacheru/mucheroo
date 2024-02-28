@@ -1,5 +1,5 @@
 const { GameDig } = require('gamedig');
-const { serverEmbed, errorEmbed } = require('./embeds');
+const { serverEmbed } = require('./embeds');
 const { infoLogger } = require('../../logs/logger');
 const { Monitoring } = require('../../database/models/mucherooDB');
 
@@ -33,8 +33,6 @@ async function fetchData(client, row) {
                     ));
             }
         }).catch(async (error) => {
-            infoLogger.error(`[MONITORING] Ошибка получения данных с сервера ${error}`);
-            const embed = await errorEmbed();
             if (!row.messageID) {
                 channel.send({ embeds: [embed] })
                     .then(async (message) => {
@@ -48,7 +46,14 @@ async function fetchData(client, row) {
             }
             else {
                 channel.messages.fetch(row.messageID)
-                    .then((message) => message.edit({ embeds: [embed] }))
+                    .then(async (message) => {
+                        message.embeds[0].data.description = '- Сервер недоступен или, возможно, отключен.';
+                        message.embeds[0].data.fields = [];
+                        message.embeds[0].data.image = 'https://i.imgur.com/AXI5LbK.png';
+                        message.embeds[0].data.thumbnail = 'https://infinity-tm.ru/files/maps_imgs/none.jpg';
+
+                        await message.edit({ embeds: [message.embeds[0]] });
+                    })
                     .catch((e) => reject(
                         infoLogger.error(`[MONITORING] Ошибка поиска сообщения ${e}`),
                     ));
