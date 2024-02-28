@@ -1,4 +1,5 @@
 const { GameDig } = require('gamedig');
+const { Colors } = require('discord.js');
 const { serverEmbed } = require('./embeds');
 const { infoLogger } = require('../../logs/logger');
 const { Monitoring } = require('../../database/models/mucherooDB');
@@ -47,6 +48,7 @@ async function fetchData(client, row) {
             else {
                 channel.messages.fetch(row.messageID)
                     .then(async (message) => {
+                        message.embeds[0].data.color = `${Colors.Red}`;
                         message.embeds[0].data.description = '- Сервер недоступен или, возможно, отключен.';
                         message.embeds[0].data.fields = [];
                         message.embeds[0].data.image = 'https://i.imgur.com/AXI5LbK.png';
