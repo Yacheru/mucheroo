@@ -14,7 +14,7 @@ module.exports = {
     serverEmbed(server) {
         const returnEmbed = new EmbedBuilder()
             .setTimestamp()
-            .setFooter({ text: 'Последние обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
+            .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
 
         if (!server) {
             return returnEmbed
@@ -36,9 +36,9 @@ module.exports = {
 
         if (players) {
             stats = [
-                { name: '# **Игрок**', value: `${players}`, inline: true },
-                { name: '**Убийств**', value: `${kills}`, inline: true },
-                { name: '**Время**', value: `${time}`, inline: true },
+                { name: '# **Игрок**', value: `${players}\n`, inline: true },
+                { name: '**Убийств**', value: `${kills}\n`, inline: true },
+                { name: '**Время**', value: `${time}\n`, inline: true },
             ];
         }
         else {
