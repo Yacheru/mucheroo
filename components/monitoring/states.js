@@ -1,10 +1,12 @@
 const { GameDig } = require('gamedig');
-const { serverEmbed } = require('./embeds');
+const { serverEmbed, errorEmbed } = require('./embeds');
 const { infoLogger } = require('../../logs/logger');
 const { Monitoring } = require('../../database/models/mucherooDB');
 
 
 async function fetchData(client, row) {
+    const channel = client.guilds.cache.get(row.guildID).channels.cache.get(row.channelID);
+
     return new Promise((resolve, reject) => {
         GameDig.query({
             type: 'counterstrike2',
@@ -12,7 +14,6 @@ async function fetchData(client, row) {
             port: row.port,
         }).then(async (result) => {
             const embed = await serverEmbed(result);
-            const channel = client.guilds.cache.get(row.guildID).channels.cache.get(row.channelID);
             if (!row.messageID) {
                 channel.send({ embeds: [embed] })
                     .then(async (message) => {
@@ -31,9 +32,28 @@ async function fetchData(client, row) {
                         infoLogger.error(`[MONITORING] Ошибка поиска сообщения ${error}`),
                     ));
             }
-        }).catch((error) => reject(
-            infoLogger.error(`[MONITORING] Ошибка получения данных сервера ${error}`),
-        ));
+        }).catch(async (error) => {
+            infoLogger.error(`[MONITORING] Ошибка получения данных с сервера ${error}`);
+            const embed = await errorEmbed();
+            if (!row.messageID) {
+                channel.send({ embeds: [embed] })
+                    .then(async (message) => {
+                        resolve(
+                            await Monitoring.update({ messageID: message.id }, { where: { port: row.port } }),
+                        );
+                    })
+                    .catch((er) => reject(
+                        infoLogger.error(`[MONITORING] Ошибка отправки сообщения ${er}`),
+                    ));
+            }
+            else {
+                channel.messages.fetch(row.messageID)
+                    .then((message) => message.edit({ embeds: [embed] }))
+                    .catch((e) => reject(
+                        infoLogger.error(`[MONITORING] Ошибка поиска сообщения ${e}`),
+                    ));
+            }
+        });
     });
 }
 

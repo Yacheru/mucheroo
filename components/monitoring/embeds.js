@@ -12,25 +12,13 @@ function roundTo(num) {
 
 module.exports = {
     serverEmbed(server) {
-        const returnEmbed = new EmbedBuilder()
-            .setTimestamp()
-            .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
-
-        if (!server) {
-            return returnEmbed
-                .setColor(Colors.Red)
-                .setImage('https://i.imgur.com/AXI5LbK.png')
-                .setThumbnail('https://infinity-tm.ru/files/maps_imgs/none.jpg')
-                .setDescription('- Сервер недоступен, возможно, выключен.');
-        }
-
         let players = '';
         let kills = '';
         let time = '';
         let stats = [];
         let i = 1;
 
-        server.players.forEach((row) => players += `${i++}) ${row.name}\n`);
+        server.players.forEach((row) => players += `${i++}) ${row.name.slice(0, 19)}\n`);
         server.players.forEach((row) => kills += `${row.raw.score}\n`);
         server.players.forEach((row) => time += `${timeInVoice(row.raw.time)}\n`);
 
@@ -57,10 +45,10 @@ module.exports = {
         };
         const precent = `${roundTo((server.numplayers / server.maxplayers) * 100)}%`;
 
-        return returnEmbed
+        return new EmbedBuilder()
             .setColor(Colors.Green)
             .setTitle(`${server.name}`)
-            .setThumbnail(server.map ? `https://infinity-tm.ru/files/maps_imgs/${server.map}.jpg` : 'https://infinity-tm.ru/files/maps_imgs/none.jpg')
+            .setThumbnail(`https://infinity-tm.ru/files/maps_imgs/${server.map}.jpg`)
             .setDescription(`- Присоединиться: \`connect ${server.connect}\``)
             .addFields(
                 { name: 'Карта:', value: `${server.map}`, inline: true },
@@ -68,6 +56,17 @@ module.exports = {
                 { name: 'Локация:', value: ':flag_ru: RU', inline: true },
                 ...stats,
             )
-            .setImage(images[precent]);
+            .setImage(images[precent])
+            .setTimestamp()
+            .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
+    },
+    errorEmbed() {
+        return new EmbedBuilder()
+            .setColor(Colors.Red)
+            .setImage('https://i.imgur.com/AXI5LbK.png')
+            .setThumbnail('https://infinity-tm.ru/files/maps_imgs/none.jpg')
+            .setDescription('- Сервер недоступен, возможно, выключен.')
+            .setTimestamp()
+            .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
     },
 };
