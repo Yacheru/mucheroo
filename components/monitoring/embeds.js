@@ -31,14 +31,14 @@ module.exports = {
         let i = 1;
 
         server.players.forEach((row) => players += `${i++}) ${row.name}\n`);
-        server.players.forEach((row) => kills += `${row.raw.score}`);
-        server.players.forEach((row) => time += `${timeInVoice(row.raw.time)}`);
+        server.players.forEach((row) => kills += `${row.raw.score}\n`);
+        server.players.forEach((row) => time += `${timeInVoice(row.raw.time)}\n`);
 
         if (players) {
             stats = [
-                { name: '# **Игрок**', value: `${players}\n`, inline: true },
-                { name: '**Убийств**', value: `${kills}\n`, inline: true },
-                { name: '**Время**', value: `${time}\n`, inline: true },
+                { name: '# **Игрок**', value: `${players}`, inline: true },
+                { name: '**Убийств**', value: `${kills}`, inline: true },
+                { name: '**Время**', value: `${time}`, inline: true },
             ];
         }
         else {
