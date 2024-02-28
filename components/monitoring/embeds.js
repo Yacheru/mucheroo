@@ -60,4 +60,13 @@ module.exports = {
             .setTimestamp()
             .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
     },
+    errorEmbed() {
+        return new EmbedBuilder()
+            .setColor(Colors.Red)
+            .setImage('https://i.imgur.com/AXI5LbK.png')
+            .setThumbnail('https://infinity-tm.ru/files/maps_imgs/none.jpg')
+            .setDescription('- Сервер недоступен, возможно, выключен.')
+            .setTimestamp()
+            .setFooter({ text: 'Последнее обновление:', iconURL: 'https://cdn.discordapp.com/emojis/1136918354276388864.gif' });
+    },
 };

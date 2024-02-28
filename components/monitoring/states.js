@@ -1,6 +1,6 @@
 const { GameDig } = require('gamedig');
 const { Colors } = require('discord.js');
-const { serverEmbed } = require('./embeds');
+const { serverEmbed, errorEmbed } = require('./embeds');
 const { infoLogger } = require('../../logs/logger');
 const { Monitoring } = require('../../database/models/mucherooDB');
 
@@ -34,6 +34,7 @@ async function fetchData(client, row) {
                     ));
             }
         }).catch(async (error) => {
+            const embed = errorEmbed();
             if (!row.messageID) {
                 channel.send({ embeds: [embed] })
                     .then(async (message) => {
@@ -51,8 +52,8 @@ async function fetchData(client, row) {
                         message.embeds[0].data.color = `${Colors.Red}`;
                         message.embeds[0].data.description = '- Сервер недоступен или, возможно, отключен.';
                         message.embeds[0].data.fields = [];
-                        message.embeds[0].data.image = 'https://i.imgur.com/AXI5LbK.png';
-                        message.embeds[0].data.thumbnail = 'https://infinity-tm.ru/files/maps_imgs/none.jpg';
+                        message.embeds[0].data.image = { 'url': 'https://i.imgur.com/AXI5LbK.png' };
+                        message.embeds[0].data.thumbnail = { 'url': 'https://infinity-tm.ru/files/maps_imgs/none.jpg' };
 
                         await message.edit({ embeds: [message.embeds[0]] });
                     })
