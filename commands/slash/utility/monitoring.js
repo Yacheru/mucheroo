@@ -43,7 +43,18 @@ module.exports = {
                 await interaction.editReply({ content: `Мониторинг сервера ${ip}:${port} успешно добавлен!` });
                 return;
             case 'remove':
-                return await interaction.editReply({ content: 'Ещё в разработке...' });
+                const monitorRow = await Monitoring.findOne({ where: { ip: ip, port: port, guildID: interaction.guild.id } });
+
+                if (monitorRow) {
+                    interaction.guild.channels.cache.get(monitorRow.channelID)
+                        .messages.fetch(monitorRow.messageID).then((message) => message.delete());
+
+                    await monitorRow.destroy();
+                    return await interaction.editReply({ content: `Мониторинг ${ip}:${port} успешно удален!` });
+                }
+                else {
+                    return await interaction.editReply({ content: 'На сервере не зарегистрирован данный сервер!' });
+                }
         }
     },
 };
