@@ -144,10 +144,10 @@ module.exports = {
 
 		return interaction.reply({ embeds: [embedHandler.infoChannel(channel, interaction.member.displayAvatarURL(), tempRoomRow.userID, adminRoom, templateRoom, membersArray)], ephemeral: true });
 	}, voiceRoomsTemplateCallback: async function(interaction) {
-		const ownTeplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
+		const ownTemplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
 		const voiceChannel = interaction.member.voice.channel;
 
-		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTeplateRow, voiceChannel)], components: [ownTeplateRow ? this.createTemplateButton() : this.deleteTemplateButton()], ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTemplateRow, voiceChannel)], components: [ownTemplateRow ? this.deleteTemplateButton() : this.createTemplateButton()], ephemeral: true });
 	}, voiceRoomsMoreCallback: function(interaction) {
 		return interaction.reply({ embeds: [embedHandler.tempRoomsInfo()], ephemeral: true });
 	},
