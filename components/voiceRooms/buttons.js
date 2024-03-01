@@ -105,14 +105,14 @@ module.exports = {
 		interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, { ViewChannel: hideCollection.get(memberChannelId) !== 'unhide' });
 
 		const replyMessage = hideCollection.get(memberChannelId) === 'unhide' ? 'скрыта' : 'раскрыта';
-		interaction.reply({ content: `${tmpvoiceIcons.hide} Комната успешно ${replyMessage}!`, ephemeral: true });
+		interaction.reply({ embeds: [embedHandler.hideChannel(replyMessage)], ephemeral: true });
 
 		hideCollection.set(memberChannelId, hideCollection.get(memberChannelId) === 'unhide' ? 'hide' : 'unhide');
 	}, voiceRoomsPrivateCallback: async function(interaction) {
 		const memberChannelId = interaction.member.voice.channel.id;
 		const tempRoomRow = await tempRooms.findOne({ where: { channelID: memberChannelId } });
 
-		if (tempRoomRow.adminRoom) return interaction.reply({ content: 'Комнату администратора нельзя открыть публично! Перекиньте пользователя из другого канала или используйте команду </room access:1202279762689806416>', ephemeral: true });
+		if (tempRoomRow.adminRoom) return interaction.reply({ embeds: [embedHandler.noOpenAdminRoom()], ephemeral: true });
 
 		if (!privateCollection.has(memberChannelId)) {
 			privateCollection.set(memberChannelId, 'open');
@@ -123,7 +123,7 @@ module.exports = {
 		});
 
 		const replyMessage = privateCollection.get(memberChannelId) === 'open' ? 'закрыта' : 'открыта';
-		interaction.reply({ embeds: [embedHandler.hideChannel(replyMessage)], ephemeral: true });
+		interaction.reply({ embeds: [embedHandler.privateChannel(replyMessage)], ephemeral: true });
 
 		privateCollection.set(memberChannelId, privateCollection.get(memberChannelId) === 'open' ? 'closed' : 'open');
 	}, voiceRoomsDownslotCallback: function(interaction) {

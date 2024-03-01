@@ -119,7 +119,19 @@ module.exports = {
     hideChannel: function(message) {
         return new EmbedBuilder()
             .setColor(success)
+            .setDescription(`- ${config.tmpvoiceIcons.hide} Комната успешно ${message}!`)
+            .setImage(config.images.transperentImage);
+    },
+    privateChannel: function(message) {
+        return new EmbedBuilder()
+            .setColor(success)
             .setDescription(`- ${config.tmpvoiceIcons.private} Комната успешно ${message}!`)
+            .setImage(config.images.transperentImage);
+    },
+    noOpenAdminRoom: function() {
+        return new EmbedBuilder()
+            .setColor(danger)
+            .setDescription('Комнату администратора нельзя открыть публично! Перекиньте пользователя из другого канала или используйте команду </room access:1202279762689806416>')
             .setImage(config.images.transperentImage);
     },
     infoChannel: function(channel, memberAvatar, ownerId, adminRoom, templateRoom, members) {
