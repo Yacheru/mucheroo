@@ -128,7 +128,7 @@ module.exports = {
             .setTitle(`Комната - ${channel.name}`)
             .setThumbnail(memberAvatar)
             .setFields(
-                { name: 'Настройки', value: `- Название: ${channel.name}\n- Лимит участников: ${channel.members.size}/${channel.userLimit}\n- Битрейт: ${channel.bitrate}\n- Создана: ${time(channel.createdAt, 'R')}\n- Создатель: ${userMention(owner)}\n- Комната администраторов: ${adminRoom}\n- Шаблонная: ${templateRoom}` },
+                { name: 'Настройки', value: `- Название: ${channel.name}\n- Лимит участников: ${channel.members.size}/${channel.userLimit}\n- Битрейт: ${channel.bitrate}\n- Создана: ${time(channel.createdAt, 'R')}\n- Создатель: ${userMention(ownerId)}\n- Комната администраторов: ${adminRoom}\n- Шаблонная: ${templateRoom}` },
                 { name: 'Участники', value: `${members}` },
             )
             .setTimestamp()
@@ -142,7 +142,7 @@ module.exports = {
                 { name: 'Про меню выбора:', value: `- **Шаблоны каналов** - Предустановленные настройки комнаты. Комнату нельзя изменить кнопками.\n - ${config.tmpvoiceIcons.template} Мой шаблон - Применяется собственный шаблон.\n - ${config.tmpvoiceIcons.communicat} Общение - 25 участников, 128 кб/с, открытый канал.\n - ${config.tmpvoiceIcons.cinema} Кинотеатр - Безлимит, 128кб/с, Говорит только создатель.\n- **Качество звука** - Изменяет bitrate (качество) звука в вашей комнате.\n - 24кб/c - Плохое качество звука.\n - 64кб/с - Аналогично личным звонкам.\n - 128кб/с - Лучше личных звонков.\n - 256кб/с - Очень хорошее качество звука.\n - 384кб/с - Наилучшее качество звука.` },
                 { name: 'Про команды:', value: '- </room access:1202279762689806416> - Запретите или выдайте права на вход в вашу комнату.\n- </room owner:1202279762689806416> - Передайте владение комнатой другому пользователю.' },
                 { name: 'Про каналы:', value: `- ${channelMention(config.channels.newChannelCreater)} - Основной триггерный канал. При заходе в него вы создадите личную комнату.\n- ${channelMention(config.channels.newChannelAdminCreater)} - Триггерный канал для администраторов. Проверки или собрания проходят в этих комнатах.` },
-            )
+            );
     },
     changeBitrateSuccess: function(bitrate, userBitrate) {
         return new EmbedBuilder()
