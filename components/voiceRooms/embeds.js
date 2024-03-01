@@ -143,7 +143,6 @@ module.exports = {
                 { name: 'Про команды:', value: '- </room access:1202279762689806416> - Запретите или выдайте права на вход в вашу комнату.\n- </room owner:1202279762689806416> - Передайте владение комнатой другому пользователю.' },
                 { name: 'Про каналы:', value: `- ${channelMention(config.channels.newChannelCreater)} - Основной триггерный канал. При заходе в него вы создадите личную комнату.\n- ${channelMention(config.channels.newChannelAdminCreater)} - Триггерный канал для администраторов. Проверки или собрания проходят в этих комнатах.` },
             )
-            .setImage(config.images.transperentImage);
     },
     changeBitrateSuccess: function(bitrate, userBitrate) {
         return new EmbedBuilder()
