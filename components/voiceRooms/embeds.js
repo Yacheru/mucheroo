@@ -10,7 +10,7 @@ module.exports = {
     notInVoice: function() {
         return new EmbedBuilder()
             .setColor(warn)
-            .setDescription(`- Для взаимодействия создайте комнату через канал - ${channelMention(config.channels.newChannelCreater)}`)
+            .setDescription(`- Для взаимодействия создайте комнату - ${channelMention(config.channels.newChannelCreater)}`)
             .setImage(config.images.transperentImage);
     },
     notOwner: function() {
