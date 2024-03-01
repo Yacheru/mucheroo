@@ -95,7 +95,7 @@ module.exports = {
     newName: function() {
         return new EmbedBuilder()
             .setColor(success)
-            .setDescription(`${config.tmpvoiceIcons.name} Название канала успешно изменено!`)
+            .setDescription(`- ${config.tmpvoiceIcons.name} Название канала успешно изменено!`)
             .setImage(config.images.transperentImage);
     },
     newLimit: function() {
@@ -131,7 +131,7 @@ module.exports = {
     noOpenAdminRoom: function() {
         return new EmbedBuilder()
             .setColor(danger)
-            .setDescription('Комнату администратора нельзя открыть публично! Перекиньте пользователя из другого канала или используйте команду </room access:1202279762689806416>')
+            .setDescription('- Комнату администратора нельзя открыть публично! Перекиньте пользователя из другого канала или используйте команду </room access:1202279762689806416>')
             .setImage(config.images.transperentImage);
     },
     infoChannel: function(channel, memberAvatar, ownerId, adminRoom, templateRoom, members) {

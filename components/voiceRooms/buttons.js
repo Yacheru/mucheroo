@@ -147,7 +147,7 @@ module.exports = {
 		const ownTeplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
 		const voiceChannel = interaction.member.voice.channel;
 
-		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTeplateRow, voiceChannel)], components: [this.createTemplateButton()], ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTeplateRow, voiceChannel)], components: [ownTeplateRow ? this.createTemplateButton() : this.deleteTemplateButton()], ephemeral: true });
 	}, voiceRoomsMoreCallback: function(interaction) {
 		return interaction.reply({ embeds: [embedHandler.tempRoomsInfo()], ephemeral: true });
 	},
