@@ -1,22 +1,23 @@
-const { GameDig } = require('gamedig');
-const { Colors } = require('discord.js');
-const { serverEmbed, errorEmbed } = require('./embeds');
-const { infoLogger } = require('../../logs/logger');
 const { Monitoring } = require('../../database/models/mucherooDB');
+const { infoLogger } = require('../../logs/logger');
+const { serverEmbed, errorEmbed } = require('./embeds');
+const { Colors } = require('discord.js');
+const { GameDig } = require('gamedig');
 
+let status = null;
 
 async function fetchData(client, row) {
     const channel = client.guilds.cache.get(row.guildID).channels.cache.get(row.channelID);
-
     return new Promise((resolve, reject) => {
         GameDig.query({
             type: 'counterstrike2',
             host: row.ip,
             port: row.port,
         }).then(async (result) => {
+            status = true;
             const embed = await serverEmbed(result);
             if (!row.messageID) {
-                channel.send({ embeds: [embed] })
+                return channel.send({ embeds: [embed] })
                     .then(async (message) => {
                         resolve(
                             await Monitoring.update({ messageID: message.id }, { where: { port: row.port } }),
@@ -27,27 +28,30 @@ async function fetchData(client, row) {
                     ));
             }
             else {
-                channel.messages.fetch(row.messageID)
+                return channel.messages.fetch(row.messageID)
                     .then((message) => message.edit({ embeds: [embed] }))
                     .catch((error) => reject(
                         infoLogger.error(`[MONITORING] Ошибка поиска сообщения ${error}`),
                     ));
             }
         }).catch(async (error) => {
+            if (!status) return;
+
+            status = false;
             const embed = errorEmbed();
             if (!row.messageID) {
-                channel.send({ embeds: [embed] })
+                return channel.send({ embeds: [embed] })
                     .then(async (message) => {
                         resolve(
                             await Monitoring.update({ messageID: message.id }, { where: { port: row.port } }),
                         );
                     })
-                    .catch((er) => reject(
-                        infoLogger.error(`[MONITORING] Ошибка отправки сообщения ${er}`),
+                    .catch((e) => reject(
+                        infoLogger.error(`[MONITORING] Ошибка отправки сообщения ${e}`),
                     ));
             }
             else {
-                channel.messages.fetch(row.messageID)
+                return channel.messages.fetch(row.messageID)
                     .then(async (message) => {
                         message.embeds[0].data.color = `${Colors.Red}`;
                         message.embeds[0].data.description = '- Сервер недоступен или, возможно, отключен.';

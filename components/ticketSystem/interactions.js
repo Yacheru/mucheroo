@@ -1,7 +1,8 @@
+const buttonHandler = require('./buttons.js');
+const modalHandler = require('./modal.js');
+
 const { infoLogger } = require('../../logs/logger');
 
-const modalHandler = require('./modal.js');
-const buttonHandler = require('./buttons.js');
 
 module.exports = {
     ticketSystemButtonInteraction: function(interaction) {

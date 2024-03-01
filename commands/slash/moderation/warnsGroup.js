@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { warns } = require('../../../database/models/mucherooDB');
-const { v4: uuidv4 } = require('uuid');
 const selectMenuHandler = require('../../../handlers/selectMenuHandler');
+
+const { warns } = require('../../../database/models/mucherooDB');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { v4: uuidv4 } = require('uuid');
 
 
 module.exports = {

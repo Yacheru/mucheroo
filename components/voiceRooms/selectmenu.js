@@ -1,6 +1,8 @@
-const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, userMention } = require('discord.js');
-const { tmpvoiceIcons } = require('../../config.json');
 const { tempRoomsTemplate, tempRooms } = require('../../database/models/mucherooDB');
+const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
+const { tmpvoiceIcons } = require('../../config.json');
+
+const embedHandler = require('./embeds');
 
 module.exports = {
 	templateRooms: function() {
@@ -63,27 +65,26 @@ module.exports = {
 
 		switch (template) {
 			case 'ownTemplate':
-
 				if (ownTeplateRow) {
-					voiceRoom.edit({ name: ownTeplateRow.channelName, userLimit: ownTeplateRow.channelLimit, bitrate: interaction.guild.premiumTier > 1 ? ownTeplateRow.channelBitrate : '64_000' });
+					await voiceRoom.edit({ name: ownTeplateRow.channelName, userLimit: ownTeplateRow.channelLimit, bitrate: interaction.guild.premiumTier > 1 ? ownTeplateRow.channelBitrate : '64_000' });
 					await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
-					return interaction.reply({ content: 'Комната изменена!', ephemeral: true });
+					return interaction.reply({ embeds: [embedHandler.templateChannel('шаблонную')], ephemeral: true });
 				}
 				else {
-					return interaction.reply({ content: 'У вас нет созданного шаблона!', ephemeral: true });
+					return interaction.reply({ embeds: [embedHandler.noTemplate()], ephemeral: true });
 				}
 
 			case 'communicat':
-				voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Connect: true, ViewChannel: true });
-				voiceRoom.edit({ userLimit: 25, bitrate: interaction.guild.premiumTier > 1 ? '128_000' : '64_000' });
+				await voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Connect: true, ViewChannel: true });
+				await voiceRoom.edit({ userLimit: 25, bitrate: interaction.guild.premiumTier > 1 ? '128_000' : '64_000' });
 				await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
-				return interaction.reply({ content: 'Комната изменена!', ephemeral: true });
+				return interaction.reply({ embeds: [embedHandler.templateChannel('общение')], ephemeral: true });
 			case 'cinema':
-				voiceRoom.edit({ userLimit: 0, bitrate: '64_000' });
-				voiceRoom.permissionOverwrites.edit(interaction.member, { Speak: true });
-				voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false });
+				await voiceRoom.edit({ userLimit: 0, bitrate: '64_000' });
+				await voiceRoom.permissionOverwrites.edit(interaction.member, { Speak: true });
+				await voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false });
 				await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
-				return interaction.reply({ content: 'Комната изменена!', ephemeral: true });
+				return interaction.reply({ embeds: [embedHandler.templateChannel('кинотеатр')], ephemeral: true });
 		}
 	}, bitrateChangeCallback: async function(interaction) {
 		const bitrate = interaction.values[0];
@@ -92,17 +93,17 @@ module.exports = {
 		const bitrateRequirements = { '128_000': 1, '256_000': 2, '384_000': 3 };
 
 		if (bitrateRequirements[bitrate] && interaction.guild.premiumTier !== bitrateRequirements[bitrate]) {
-			return interaction.reply({ content: `Сервер не поддерживает данный уровень битрейта! Необходим - ${bitrateRequirements[bitrate]} уровень буста.`, ephemeral: true });
+			return interaction.reply({ embeds: [embedHandler.notSupportedBitrate(bitrateRequirements[bitrate])], ephemeral: true });
 		}
 
 		interaction.member.voice.channel.setBitrate(bitrate)
 			.then((channel) =>
-				interaction.reply({ content: `Успешно установлено ${channel.bitrate} (${userBitrate[channel.bitrate]})`, ephemeral: true }));
+				interaction.reply({ embeds: [embedHandler.changeBitrateSuccess(channel.bitrate, userBitrate[channel.bitrate])], ephemeral: true }));
 	}, tempRoomsVoiceSelectmenu: async function(interaction) {
-		await interaction.deferReply({ content: 'Секундочку...', ephemeral: true });
+		await interaction.deferReply({ ephemeral: true });
 		const members = interaction.member.voice.channel.members;
 
-		if (members.size === 1) return interaction.editReply({ content: 'Это действие невозможно, потому что в комнате нет никого, кроме вас.', ephemeral: true });
+		if (members.size === 1) return interaction.editReply({ embeds: [embedHandler.noUsersInVoice()], ephemeral: true });
 
 		const tempRoomsVoiceSelectRow = new ActionRowBuilder().addComponents(
 			new StringSelectMenuBuilder()
@@ -113,22 +114,21 @@ module.exports = {
 					.map((member) => ({
 						label: member.displayName,
 						value: member.id,
-						description: `Нажмите, чтобы выполнить действие с ${member.displayName}`,
+						description: `Нажмите, чтобы выполнить действие над ${member.displayName}`,
 						emoji: tmpvoiceIcons.member,
 					})),
 				),
 		);
-		await interaction.followUp({ content: 'Выберите пользователя из голосового канала:', components: [tempRoomsVoiceSelectRow], ephemeral: true });
+		await interaction.editReply({ content: 'Выберите пользователя из вашей комнаты:', components: [tempRoomsVoiceSelectRow] });
 	}, tempRoomsVoiceSelectmenuCallback: async function(interaction) {
 		const member = interaction.guild.members.cache.get(interaction.values[0]);
 
-		if (!member) return interaction.reply({ content: 'Не удалось найти пользователя.', ephemeral: true });
-		if (!member.voice.channel) return interaction.reply({ content: 'Пользователь не находится в голосовом канале!', ephemeral: true });
+		if (!member) return interaction.reply({ embeds: [embedHandler.searchUserFail()], ephemeral: true });
+		if (!member.voice.channel) return interaction.reply({ embeds: [embedHandler.userNotInVoice()], ephemeral: true });
 
-		const action = member.voice.serverMute ? false : true;
 		const messageReply = member.voice.serverMute ? 'размутил' : 'замутил';
 
-		member.voice.setMute(action, `${interaction.member.displayName} ${messageReply} пользователя в приватной комнате`);
-		await interaction.deferUpdate({ content: `Вы успешно ${messageReply}и пользователя ${userMention(member.displayName)}`, ephemeral: true });
+		await member.voice.setMute(member.voice.serverMute, `${interaction.member.displayName} ${messageReply} пользователя в приватной комнате`);
+		await interaction.deferUpdate({ embed: [embedHandler.muteOrUnmuteUser(messageReply, member.id)], ephemeral: true });
 	},
 };

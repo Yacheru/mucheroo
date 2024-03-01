@@ -1,21 +1,21 @@
-const { channelMention } = require('discord.js');
-const { channels } = require('../../config.json');
 const { tempRooms } = require('../../database/models/mucherooDB');
 const { infoLogger } = require('../../logs/logger');
 
+const selectMenuHandler = require('./selectmenu.js');
 const modalHandler = require('./modal.js');
 const buttonHandler = require('./buttons.js');
-const selectMenuHandler = require('./selectmenu.js');
+const embedHandler = require('./embeds');
+
 
 module.exports = {
     tempRoomsButtonInteraction: async function(interaction) {
         const privateRoomsNoVoiceCustomIDs = ['upslot', 'hide', 'private', 'access', 'voice', 'downslot', 'limit', 'name', 'owner', 'info', 'templateButton'];
 
         if (privateRoomsNoVoiceCustomIDs.includes(interaction.customId)) {
-            if (!interaction.member.voice.channel) return interaction.reply({ content: `Вы не находитесь в голосовом канале - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+            if (!interaction.member.voice.channel) return interaction.reply({ embeds: [embedHandler.notInVoice()], ephemeral: true });
 
             const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.user.id } });
-            if (!tempRoomRow) return interaction.reply({ content: 'Вы не являетесь создателем комнаты.', ephemeral: true });
+            if (!tempRoomRow) return interaction.reply({ embeds: [embedHandler.notOwner()], ephemeral: true });
         }
 
         switch (interaction.customId) {
@@ -68,10 +68,10 @@ module.exports = {
             case 'tempRoomsVoiceSelect':
                 return selectMenuHandler.tempRoomsVoiceSelectmenuCallback(interaction);
             case 'templateRooms':
-                if (!interaction.member.voice.channel) return interaction.reply({ content: `Вы не находитесь в голосовом канале - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+                if (!interaction.member.voice.channel) return interaction.reply({ embeds: [embedHandler.notInVoice()], ephemeral: true });
                 return selectMenuHandler.templateRoomsCallback(interaction);
             case 'bitrateChange':
-                if (!interaction.member.voice.channel) return interaction.reply({ content: `Вы не находитесь в голосовом канале - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+                if (!interaction.member.voice.channel) return interaction.reply({ embeds: [embedHandler.notInVoice()], ephemeral: true });
                 return selectMenuHandler.bitrateChangeCallback(interaction);
             default:
                 return infoLogger.error(`[TEMP-ROOMS] [SELECT-MENU] ID (${interaction.customId}) компонента не найден!`);

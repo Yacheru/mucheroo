@@ -1,8 +1,8 @@
 const { EmbedBuilder, channelMention } = require('discord.js');
 const { images, channels, tmpvoiceIcons } = require('../../config.json');
 
-const buttonsHandler = require('../../components/voiceRooms/buttons');
 const selectMenuHandler = require('../../components/voiceRooms/selectmenu');
+const buttonsHandler = require('../../components/voiceRooms/buttons');
 
 module.exports = {
 	data: {

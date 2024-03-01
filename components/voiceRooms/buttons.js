@@ -1,6 +1,8 @@
-const { ButtonStyle, EmbedBuilder, ButtonBuilder, ActionRowBuilder, Collection, channelMention, time, userMention } = require('discord.js');
+const { ButtonStyle, ButtonBuilder, ActionRowBuilder, Collection, userMention } = require('discord.js');
 const { tempRooms, tempRoomsTemplate } = require('../../database/models/mucherooDB');
-const { channels, tmpvoiceIcons } = require('../../config.json');
+const { tmpvoiceIcons } = require('../../config.json');
+
+const embedHandler = require('./embeds');
 
 const privateCollection = new Collection();
 const hideCollection = new Collection();
@@ -82,17 +84,17 @@ module.exports = {
 		);
 	}, deleteTemplateButtonCallback: async function(interaction) {
 		await tempRoomsTemplate.destroy({ where: { userID: interaction.member.id } });
-		return interaction.update({ content: 'Ваш шаблон успешно удалён!', ephemeral: true, embeds: [], components: [] });
+		return interaction.update({ ephemeral: true, embeds: [embedHandler.deleteTemplateSuccess()], components: [] });
 	}, cancelTemplatecallback: function(interaction) {
-		return interaction.update({ embeds: [], content: 'Вы успешно отменили запрос на создание комнаты!', ephemeral: true, components: [] });
+		return interaction.update({ embeds: [embedHandler.cancelCreateTemplate()], ephemeral: true, components: [] });
 	}, createTemplateSuccessCallback: async function(interaction) {
 		const voiceChannel = interaction.member.voice.channel;
 		await tempRoomsTemplate.create({ userID: interaction.member.id, channelLimit: voiceChannel.userLimit, channelName: voiceChannel.name, channelBitrate: voiceChannel.bitrate });
-		return interaction.update({ embeds: [], content: 'Ваш шаблон успешно создан!', ephemeral: true, components: [] });
+		return interaction.update({ embeds: [embedHandler.createTemplateSuccess()], ephemeral: true, components: [] });
 	}, voiceRoomsUpslotCallback: function(interaction) {
-		if (interaction.member.voice.channel.userLimit === 99) return interaction.reply({ content: `${tmpvoiceIcons.upslot} Лимит участников достиг максимума!`, ephemeral: true });
+		if (interaction.member.voice.channel.userLimit === 99) return interaction.reply({ embeds: [embedHandler.maxLimit()], ephemeral: true });
 		interaction.member.voice.channel.edit({ userLimit: interaction.member.voice.channel.userLimit + 1 });
-		return interaction.reply({ content: `${tmpvoiceIcons.upslot} Лимит участников успешно изменен!`, ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.newLimit()], ephemeral: true });
 	}, voiceRoomsHideCallback: function(interaction) {
 		const memberChannelId = interaction.member.voice.channel.id;
 
@@ -116,19 +118,19 @@ module.exports = {
 			privateCollection.set(memberChannelId, 'open');
 		}
 
-		interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
+		await interaction.member.voice.channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
 			Connect: privateCollection.get(memberChannelId) !== 'open',
 		});
 
 		const replyMessage = privateCollection.get(memberChannelId) === 'open' ? 'закрыта' : 'открыта';
-		interaction.reply({ content: `${tmpvoiceIcons.private} Комната успешно ${replyMessage}!`, ephemeral: true });
+		interaction.reply({ embeds: [embedHandler.hideChannel(replyMessage)], ephemeral: true });
 
 		privateCollection.set(memberChannelId, privateCollection.get(memberChannelId) === 'open' ? 'closed' : 'open');
 	}, voiceRoomsDownslotCallback: function(interaction) {
-		if (interaction.member.voice.channel.userLimit === 0) return interaction.reply({ content: `${tmpvoiceIcons.downslot} Лимит участников достиг минимума!`, ephemeral: true });
+		if (interaction.member.voice.channel.userLimit === 0) return interaction.reply({ embeds: [embedHandler.minLimit()], ephemeral: true });
 
 		interaction.member.voice.channel.edit({ userLimit: interaction.member.voice.channel.userLimit - 1 });
-		interaction.reply({ content: `${tmpvoiceIcons.downslot} Лимит участников успешно изменен!`, ephemeral: true });
+		interaction.reply({ embeds: [embedHandler.newLimit()], ephemeral: true });
 	}, voiceRoomsInfoCallback: async function(interaction) {
 		const tempRoomRow = await tempRooms.findOne({ where: { channelID: interaction.member.voice.channel.id } });
 		const adminRoom = tempRoomRow.adminRoom ? 'Да' : 'Нет';
@@ -140,50 +142,13 @@ module.exports = {
 			membersArray.push(`- ${userMention(member.id)} ${tempRoomRow.userID === member.id ? tmpvoiceIcons.owner : ' '}\n`);
 		});
 
-		const infoEmbed = new EmbedBuilder()
-			.setTitle(`Комната - ${channel.name}`)
-			.setThumbnail(interaction.member.displayAvatarURL())
-			.setFields(
-				{ name: 'Настройки', value: `- Название: ${channel.name}\n- Лимит участников: ${channel.members.size}/${channel.userLimit}\n- Битрейт: ${channel.bitrate}\n- Создана: ${time(channel.createdAt, 'R')}\n- Создатель: ${userMention(tempRoomRow.userID)}\n- Комната администраторов: ${adminRoom}\n- Шаблонная: ${templateRoom}` },
-				{ name: 'Участники', value: `${membersArray}` },
-			)
-			.setTimestamp();
-
-		return interaction.reply({ embeds: [infoEmbed], ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.infoChannel(channel, interaction.member.displayAvatarURL(), tempRoomRow.userID, adminRoom, templateRoom, membersArray)], ephemeral: true });
 	}, voiceRoomsTemplateCallback: async function(interaction) {
 		const ownTeplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
 		const voiceChannel = interaction.member.voice.channel;
 
-		if (ownTeplateRow) {
-			const haveTemplateEmbed = new EmbedBuilder()
-				.setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
-				.addFields(
-					{ name: 'Настройки', value: `- Название: **${ownTeplateRow.channelName}**\n- Лимит участников: **${ownTeplateRow.channelLimit === 0 ? 'Без ограничений' : ownTeplateRow.channelLimit}**\n- Битрейт: **${ownTeplateRow.channelBitrate}**\n- Дата создания: ${time(new Date(ownTeplateRow.createdAt), 'R')}` },
-				)
-				.setThumbnail(interaction.member.displayAvatarURL())
-				.setFooter({ text: 'Нажмите на кнопку ниже, чтобы удалить тикет', ephemeral: true });
-
-			return interaction.reply({ content: 'У вас уже создан шаблон. Вы не можете создать ещё', ephemeral: true, embeds: [haveTemplateEmbed], components: [this.deleteTemplateButton()] });
-		}
-		else {
-			const createTemplateEmbed = new EmbedBuilder()
-				.setAuthor({ name: interaction.member.displayName, iconURL: interaction.member.displayAvatarURL() })
-				.addFields(
-					{ name: 'Настройки:', value: `- Название: **${voiceChannel.name}**\n- Лимит участников: **${voiceChannel.userLimit === 0 ? 'Без ограничений' : voiceChannel.userLimit}**\n- Битрейт: **${voiceChannel.bitrate}**` },
-				)
-				.setThumbnail(interaction.member.displayAvatarURL())
-				.setFooter({ text: 'Вы можете предложить другие параметры для хранения в шаблоне - @yacheru', ephemeral: true });
-			return interaction.reply({ content: 'У вас нет личных шаблонов. Желаете создать?', embeds: [createTemplateEmbed], ephemeral: true, components: [this.createTemplateButton()] });
-		}
+		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTeplateRow, voiceChannel)], components: [this.createTemplateButton()], ephemeral: true });
 	}, voiceRoomsMoreCallback: function(interaction) {
-		const moreEmbed = new EmbedBuilder()
-			.setFields(
-				{ name: 'Про кнопки:', value: `- ${tmpvoiceIcons.upslot} / ${tmpvoiceIcons.downslot} - Данные кнопки изменяют лимит вашей комнаты на 1 в + или -.\n- ${tmpvoiceIcons.hide} - Данная кнопка скрывает/показывает ваш канал в списке каналов.\n- ${tmpvoiceIcons.private} - Данная кнопка открывает/скрывает ваш канал.\n- ${tmpvoiceIcons.voice} - Включить или выключить пользователю в вашей комнате микрофон.\n- ${tmpvoiceIcons.template} - Создать свой шаблон. Потом его можно применить в меню выбора.\n- ${tmpvoiceIcons.limit} - Поможет вам изменить лимит участников комнаты до желаемого.\n- ${tmpvoiceIcons.name} - Используйте, если нужно изменить название своей комнаты.\n- ${tmpvoiceIcons.info} - Узнать информацию о канале в котором вы находитесь.\n- ${tmpvoiceIcons.more} - Вызовет данное осведомительное сообщение вновь.`, inline: false },
-				{ name: 'Про меню выбора:', value: `- **Шаблоны каналов** - Предустановленные настройки комнаты. Комнату нельзя изменить кнопками.\n - ${tmpvoiceIcons.template} Мой шаблон - Применяется собственный шаблон.\n - ${tmpvoiceIcons.communicat} Общение - 25 участников, 128 кб/с, открытый канал.\n - ${tmpvoiceIcons.cinema} Кинотеатр - Безлимит, 128кб/с, Говорит только создатель.\n- **Качество звука** - Изменяет bitrate (качество) звука в вашей комнате.\n - 24кб/c - Плохое качество звука.\n - 64кб/с - Аналогично личным звонкам.\n - 128кб/с - Лучше личных звонков.\n - 256кб/с - Очень хорошее качество звука.\n - 384кб/с - Наилучшее качество звука.` },
-				{ name: 'Про команды:', value: '- </room access:1202279762689806416> - Запретите или выдайте права на вход в вашу комнату.\n- </room owner:1202279762689806416> - Передайте владение комнатой другому пользователю.' },
-				{ name: 'Про каналы:', value: `- ${channelMention(channels.newChannelCreater)} - Основной триггерный канал. При заходе в него вы создадите личную комнату.\n- ${channelMention(channels.newChannelAdminCreater)} - Триггерный канал для администраторов. Проверки или собрания проходят в этих комнатах.` },
-			);
-
-		interaction.reply({ embeds: [moreEmbed], ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.tempRoomsInfo()], ephemeral: true });
 	},
 };

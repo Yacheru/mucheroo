@@ -1,6 +1,5 @@
-const { time } = require('discord.js');
-
 const { voiceActivity } = require('../../database/models/mucherooDB');
+const { time } = require('discord.js');
 
 
 function pluralize(number, single, few, many) {

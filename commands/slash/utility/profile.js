@@ -1,5 +1,5 @@
-const { SlashCommandBuilder } = require('discord.js');
 const { profileCommand } = require('../../../components/profile/command');
+const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     deferred: true,

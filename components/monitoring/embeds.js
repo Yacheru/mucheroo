@@ -1,5 +1,6 @@
-const { EmbedBuilder, Colors } = require('discord.js');
 const { timeInVoice } = require('../voiceActivity/voiceState');
+const { EmbedBuilder, Colors } = require('discord.js');
+
 
 function roundTo(num) {
     if (num < 10) {

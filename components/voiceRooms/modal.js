@@ -1,5 +1,6 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const { tmpvoiceIcons } = require('../../config.json');
+
+const embedHandler = require('./embeds');
 
 module.exports = {
 	tempRoomsNameModal: function() {
@@ -39,14 +40,14 @@ module.exports = {
 			return /^\d+$/.test(str);
 		}
 
-		if (!isNumeric(newLimit)) return interaction.reply({ content: 'Введите целочисленное значение от 0 до 99!', ephemeral: true });
+		if (!isNumeric(newLimit)) return interaction.reply({ embeds: [embedHandler.notCorrectNumber()], ephemeral: true });
 
 		interaction.member.voice.channel.edit({ userLimit: newLimit });
-		return interaction.reply({ content: `${tmpvoiceIcons.limit} Лимит участников успешно изменен!`, ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.newLimit()], ephemeral: true });
 	}, tempRoomsNameModalCallback: function(interaction) {
 		const newName = interaction.fields.getTextInputValue('nameModalInput');
 		const voiceChannel = interaction.member.voice.channel;
 		voiceChannel.setName(newName);
-		return interaction.reply({ content: `${tmpvoiceIcons.name} Название канала успешно изменено!`, ephemeral: true });
+		return interaction.reply({ embeds: [embedHandler.newName()], ephemeral: true });
 	},
 };

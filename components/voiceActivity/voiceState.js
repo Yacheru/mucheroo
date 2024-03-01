@@ -1,9 +1,9 @@
-const { Op } = require('sequelize');
-const { userMention, Colors } = require('discord.js');
 const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
+const { userMention, Colors } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
 const { EmbedBuilder } = require('@discordjs/builders');
 const { images } = require('../../config.json');
+const { Op } = require('sequelize');
 
 function timeInVoice(time) {
     const h = Math.floor(time / 3600);
@@ -13,6 +13,7 @@ function timeInVoice(time) {
 }
 
 async function sendActivityEmbed(client, title, queryCondition, errorMessage, time) {
+    const channel = client.channels.cache.get('1146210021315727511');
     const ActivityEmbed = new EmbedBuilder()
         .setTitle(title)
         .setImage(images.transperentImage)
@@ -20,7 +21,6 @@ async function sendActivityEmbed(client, title, queryCondition, errorMessage, ti
 
     try {
         const activityRows = await voiceActivity.findAll({ where: queryCondition, limit: 10, order: [['today', 'DESC']] });
-        const channel = client.channels.cache.get('1205814495415373876');
 
         let userRow = '';
         let i = 1;

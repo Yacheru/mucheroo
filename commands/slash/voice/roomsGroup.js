@@ -3,6 +3,8 @@ const { tempRooms } = require('../../../database/models/mucherooDB');
 const { boostRoomControl } = require('../../../components/boostSystem/boostCommand');
 const { channels } = require('../../../config.json');
 
+const embedHandler = require('../../../components/voiceRooms/embeds');
+
 module.exports = {
     deferred: false,
     data: new SlashCommandBuilder()
@@ -60,15 +62,15 @@ module.exports = {
         const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.member.id } });
 
         if (!member || member.user.bot || member.id === interaction.member.id) {
-            return interaction.reply({ content: 'Некорректный пользователь.', ephemeral: true });
+            return interaction.reply({ embeds: [embedHandler.notCorrectUser()], ephemeral: true });
         }
 
         if (!interaction.member.voice.channel && command !== 'boost') {
-            return interaction.reply({ content: `Создайте личную комнату для взаимодействия с командой - ${channelMention(channels.newChannelCreater)}`, ephemeral: true });
+            return interaction.reply({ embeds: [embedHandler.notInVoice()], ephemeral: true });
         }
 
         if (!tempRoomRow && command !== 'boost') {
-            return interaction.reply({ content: 'Вы не являетесь создателем комнаты!', ephemeral: true });
+            return interaction.reply({ embeds: [embedHandler.notOwner()], ephemeral: true });
         }
 
         switch (command) {
@@ -77,10 +79,10 @@ module.exports = {
                 const messageReply = action ? 'открыли' : 'закрыли';
 
                 interaction.member.voice.channel.permissionOverwrites.edit(member, { Connect: action });
-                return interaction.reply({ content: `Вы успешно ${messageReply} комнату пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.reply({ embeds: [embedHandler.lockOrOpenRoom(messageReply, member.id)], ephemeral: true });
             case 'owner':
                 await tempRooms.update({ userID: member.id }, { where: { userID: interaction.user.id } });
-                return interaction.reply({ content: `Вы успешно передали владение комнатой пользователю ${userMention(member.id)}`, ephemeral: true });
+                return interaction.reply({ embeds: [embedHandler.transferRoom(member.id)], ephemeral: true });
             case 'boost':
                 return await boostRoomControl(interaction);
         }

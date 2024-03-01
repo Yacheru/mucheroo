@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-const { ChannelType, PermissionFlagsBits } = require('discord.js');
-const { channels, roles } = require('../../config.json');
 const { tempRooms } = require('../../database/models/mucherooDB');
+const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
+const { channels, roles } = require('../../config.json');
 
 const voiceArray = [];
 

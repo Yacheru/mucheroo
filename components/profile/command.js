@@ -1,7 +1,7 @@
+const { connections } = require('../../database/models/webApplication');
+
 const buttonCollector = require('./buttons');
 const embedCollector = require('./embed');
-
-const { connections } = require('../../database/models/webApplication');
 
 
 module.exports = {

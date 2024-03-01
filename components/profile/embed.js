@@ -1,10 +1,9 @@
-const { EmbedBuilder, time, channelMention } = require('discord.js');
 const SteamID = require('steamid');
 
+const { EmbedBuilder, time, channelMention } = require('discord.js');
 const { voiceState, warns } = require('../../database/models/mucherooDB');
-const { lvlBase } = require('../../database/models/level_ranks');
-
 const { formatTime, voiceActivityTime, getFormattedTime } = require('./funcs');
+const { lvlBase } = require('../../database/models/level_ranks');
 const { roles } = require('../../config.json');
 
 module.exports = {
