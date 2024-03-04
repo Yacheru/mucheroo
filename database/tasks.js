@@ -1,10 +1,10 @@
-const cron = require('node-cron');
-
 const { voiceActivity } = require('../database/models/mucherooDB/');
-const { activityin24h, activityin7days } = require('../components/voiceActivity/voiceState.js');
+const { activityIn24h, activityIn7days } = require('../components/voiceActivity/voiceState.js');
 const { infoLogger } = require('../logs/logger.js');
 const { Monitoring } = require('./models/mucherooDB');
 const { fetchData } = require('../components/monitoring/states');
+
+const cron = require('node-cron');
 
 
 module.exports = {
@@ -13,7 +13,7 @@ module.exports = {
 
         cron.schedule('0 0 * * *', async () => {
             try {
-                await activityin24h(client);
+                await activityIn24h(client);
                 return await voiceActivity.update({ today: 0 }, { where: {} });
             }
             catch (error) {
@@ -31,7 +31,7 @@ module.exports = {
 
         cron.schedule('0 0 * * 0', async () => {
             try {
-                await activityin7days(client);
+                await activityIn7days(client);
                 return await voiceActivity.update({ today: 0 }, { where: {} });
             }
             catch (error) {

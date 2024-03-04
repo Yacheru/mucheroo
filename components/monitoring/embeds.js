@@ -19,7 +19,7 @@ module.exports = {
         let stats = [];
         let i = 1;
 
-        server.players.forEach((row) => players += `${i++}) ${row.name.slice(0, 19)}\n`);
+        server.players.forEach((row) => players += `${i++}) ${row.name.slice(0, 17)}\n`);
         server.players.forEach((row) => kills += `${row.raw.score}\n`);
         server.players.forEach((row) => time += `${timeInVoice(row.raw.time)}\n`);
 

@@ -1,5 +1,5 @@
-const db = require('./../../index.js');
 const { Model, DataTypes } = require('sequelize');
+const db = require('./../../index.js');
 
 
 class Monitoring extends Model {
@@ -23,7 +23,12 @@ Monitoring.init(
         port: {
             type: DataTypes.STRING,
         },
-    }, {
+        disabled: {
+            type: DataTypes.BOOLEAN,
+        },
+    },
+    {
+        timestamps: false,
         sequelize: db.sequelize,
         modelName: 'Monitoring',
     },

@@ -1,7 +1,6 @@
 const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
-const { userMention, Colors } = require('discord.js');
+const { userMention, Colors, EmbedBuilder } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
-const { EmbedBuilder } = require('@discordjs/builders');
 const { images } = require('../../config.json');
 const { Op } = require('sequelize');
 
@@ -12,8 +11,8 @@ function timeInVoice(time) {
     return `${h} ч. ${m} мин.`;
 }
 
-async function sendActivityEmbed(client, title, queryCondition, errorMessage, time) {
-    const channel = client.channels.cache.get('1146210021315727511');
+async function sendActivityEmbed(client, title, queryCondition, noData, time) {
+    const channel = client.channels.cache.get('1205814495415373876');
     const ActivityEmbed = new EmbedBuilder()
         .setTitle(title)
         .setImage(images.transperentImage)
@@ -27,12 +26,12 @@ async function sendActivityEmbed(client, title, queryCondition, errorMessage, ti
 
         if (activityRows.length > 0) {
             for (const row of activityRows) {
-                userRow += `${i}) ${userMention(row.userID)} ${timeInVoice(time === 'day' ? row.day : row.week)}\n`;
+                userRow += `${i}) ${userMention(row.userID)} ${timeInVoice(time === 'day' ? row.today : row.week)}\n`;
                 i++;
             }
         }
         else {
-            userRow += errorMessage;
+            userRow += noData;
         }
 
         ActivityEmbed.setDescription(userRow).setColor(Colors.Blue);
@@ -69,11 +68,11 @@ module.exports = {
         }
     },
 
-    activityin24h: async function(client) {
+    activityIn24h: async function(client) {
         return await sendActivityEmbed(client, 'Голосовая активность за 24 часа', { today: { [Op.gt]: 60 } }, 'Голосовая активность за 24 часа отсутствует :(', 'day');
     },
 
-    activityin7days: async function(client) {
+    activityIn7days: async function(client) {
         return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { today: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
     },
     timeInVoice,
