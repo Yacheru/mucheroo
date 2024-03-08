@@ -50,7 +50,7 @@ module.exports = {
             .setColor(Colors.Green)
             .setTitle(`${server.name}`)
             .setThumbnail(`https://infinity-tm.ru/files/maps_imgs/${server.map}.jpg`)
-            .setDescription(`- Присоединиться: \`connect ${server.connect}\``)
+            .setDescription(`\`\`\`connect ${server.connect}\`\`\``)
             .addFields(
                 { name: 'Карта:', value: `${server.map}`, inline: true },
                 { name: 'Игроков:', value: `${server.numplayers}/${server.maxplayers} [${Math.round((server.numplayers / server.maxplayers) * 100)}%]`, inline: true },

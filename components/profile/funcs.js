@@ -47,8 +47,8 @@ module.exports = {
         return { 'day': day, 'week': week, 'all': all };
     },
 
-    getFormattedTime: function(inputTimestamp) {
-        const roundedTimestamp = Math.round(inputTimestamp / 1000);
+    timestampFormatted: function(inputTimestamp, seconds) {
+        const roundedTimestamp = seconds ? Math.round(inputTimestamp) : Math.round(inputTimestamp / 1000);
         const dayTime = time(roundedTimestamp, 'd');
         const rTime = time(roundedTimestamp, 'R');
 

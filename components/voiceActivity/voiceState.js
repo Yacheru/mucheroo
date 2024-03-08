@@ -1,7 +1,7 @@
 const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
 const { userMention, Colors, EmbedBuilder } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
-const { images } = require('../../config.json');
+const { images, tmpvoiceIcons, roles } = require('../../config.json');
 const { Op } = require('sequelize');
 
 function timeInVoice(time) {
@@ -26,7 +26,8 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
 
         if (activityRows.length > 0) {
             for (const row of activityRows) {
-                userRow += `${i}) ${userMention(row.userID)} ${timeInVoice(time === 'day' ? row.today : row.week)}\n`;
+                const hasAdminRole = client.guilds.cache.get('494212272353181726').members.cache.get(row.userID).roles.cache.has(roles['admin']);
+                userRow += `${i}) ${userMention(row.userID)} ${hasAdminRole ? tmpvoiceIcons['admin'] : ''} ${timeInVoice(time === 'day' ? row.today : row.week)}\n`;
                 i++;
             }
         }
@@ -51,20 +52,20 @@ module.exports = {
             await voiceActivity.upsert({ userID: member.id });
         }
         catch (error) {
-            return infoLogger.error(`[VOICE-CONNECT] ${error}`);
+            return infoLogger.error(`[VOICE-CONNECT] Ошибка при входе пользователя из канала: ${error}`);
         }
     },
 
     onVoiceChannelLeave: async function(member) {
         try {
-            const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
+            const voiceStateRow = await voiceActivity.findOne({ where: { userID: member.id } });
             const now = new Date().getTime();
             const timeSpent = (now - voiceStateRow.joinedAt) / 1000;
 
-            return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
+            return await voiceStateRow.increment({ today: timeSpent, week: timeSpent, all: timeSpent });
         }
         catch (error) {
-            return infoLogger.error(`[VOICE-LEAVE] ${error}`);
+            return infoLogger.error(`[VOICE-LEAVE] Ошибка при выходе пользователя из канала: ${error}`);
         }
     },
 
