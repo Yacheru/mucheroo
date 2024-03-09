@@ -58,11 +58,11 @@ module.exports = {
 
     onVoiceChannelLeave: async function(member) {
         try {
-            const voiceStateRow = await voiceActivity.findOne({ where: { userID: member.id } });
+            const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
             const now = new Date().getTime();
             const timeSpent = (now - voiceStateRow.joinedAt) / 1000;
 
-            return await voiceStateRow.increment({ today: timeSpent, week: timeSpent, all: timeSpent });
+            return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-LEAVE] Ошибка при выходе пользователя из канала: ${error}`);
