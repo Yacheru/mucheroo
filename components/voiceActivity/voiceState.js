@@ -62,7 +62,7 @@ module.exports = {
             const now = new Date().getTime();
             const timeSpent = (now - voiceStateRow.joinedAt) / 1000;
 
-            return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent });
+            return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-LEAVE] Ошибка при выходе пользователя из канала: ${error}`);
