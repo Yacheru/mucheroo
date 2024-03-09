@@ -14,7 +14,7 @@ module.exports = {
         cron.schedule('0 0 * * *', async () => {
             try {
                 await activityIn24h(client);
-                return await voiceActivity.update({ today: 0 }, { where: {} });
+                return await voiceActivity.update({ today: 0 }, { where: { } });
             }
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в сутки:', error);
@@ -32,7 +32,7 @@ module.exports = {
         cron.schedule('0 0 * * 0', async () => {
             try {
                 await activityIn7days(client);
-                return await voiceActivity.update({ today: 0 }, { where: {} });
+                return await voiceActivity.update({ week: 0 }, { where: { } });
             }
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в неделю:', error);
