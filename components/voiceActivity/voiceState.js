@@ -12,7 +12,7 @@ function timeInVoice(time) {
 }
 
 async function sendActivityEmbed(client, title, queryCondition, noData, time) {
-    const channel = client.channels.cache.get('1146210021315727511');
+    const channel = client.channels.cache.get('1211690986200367176');
     const ActivityEmbed = new EmbedBuilder()
         .setTitle(title)
         .setImage(images.transperentImage)
