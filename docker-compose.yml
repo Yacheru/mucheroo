@@ -9,10 +9,9 @@ services:
         condition: service_healthy
 
   postgres:
-    container_name: pg-local
+    container_name: postgres
     user: root
     image: docker.io/bitnami/postgresql:16
-    restart: always
     volumes:
       - ./data/pg-local:/bitnami/postgresql/data
     ports:
@@ -21,3 +20,10 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      disable: false
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 60s
