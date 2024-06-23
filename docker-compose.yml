@@ -5,7 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   postgres:
     container_name: pg-local

@@ -2,8 +2,8 @@ const { Events } = require('discord.js');
 const { infoLogger } = require('../../logs/logger.js');
 const { dayTask, weekTask } = require('../../database/tasks.js');
 const mModels = require('../../database/models/mucherooDB/index.js');
-const wModels = require('../../database/models/webApplication/index.js');
-const lModels = require('../../database/models/level_ranks/index.js');
+// const wModels = require('../../database/models/webApplication/index.js');
+// const lModels = require('../../database/models/level_ranks/index.js');
 const { monitoringUpdate } = require('../../database/tasks');
 
 module.exports = {

@@ -32,7 +32,7 @@ module.exports = {
 async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     const permissions = isAdmin ? [
         { id: guild.roles.everyone, deny: [PermissionFlagsBits.Connect] },
-        { id: roles.admin, allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Stream, PermissionFlagsBits.Connect] },
+        { id: roles['admin'], allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.SendMessages, PermissionFlagsBits.Stream, PermissionFlagsBits.Connect] },
     ] : [
         { id: member, allow: [PermissionFlagsBits.Connect, PermissionFlagsBits.ViewChannel] },
         { id: member.guild.roles.everyone, allow: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.AttachFiles] },
@@ -46,7 +46,6 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     });
     voiceArray.push(channel.id);
     await member.voice.setChannel(channel);
-    await tempRooms.upsert({ userID: member.id, channelID: channel.id, today: new Date().getTime(), adminRoom: isAdmin });
 }
 
 async function updatePermissions(channel, member) {

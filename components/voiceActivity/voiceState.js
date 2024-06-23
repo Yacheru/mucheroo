@@ -1,8 +1,10 @@
 const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
 const { userMention, Colors, EmbedBuilder } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
-const { images, tmpvoiceIcons, roles } = require('../../config.json');
+const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../config.json');
 const { Op } = require('sequelize');
+
+const NOW = Date.now();
 
 function timeInVoice(time) {
     const seconds = time / 1000;
@@ -13,7 +15,7 @@ function timeInVoice(time) {
 }
 
 async function sendActivityEmbed(client, title, queryCondition, noData, time) {
-    const channel = client.channels.cache.get('1211690986200367176');
+    const channel = client.channels.cache.get(channels['activityEmbedChannel']);
     const ActivityEmbed = new EmbedBuilder()
         .setTitle(title)
         .setImage(images['transperentImage'])
@@ -25,10 +27,12 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
         let userRow = '';
         let i = 1;
 
+        const prefixArray = ['🥇', '🥈', '🥉', '4)', '5)', '6)', '7)', '8)', '9)', '10)'];
+
         if (activityRows.length > 0) {
             for (const row of activityRows) {
-                const hasAdminRole = client.guilds.cache.get('494212272353181726').members.cache.get(row.userID).roles.cache.has(roles['admin']);
-                userRow += `${i}) ${userMention(row.userID)} ${hasAdminRole ? tmpvoiceIcons['admin'] : ''} ${timeInVoice(time === 'day' ? row.today : row.week)}\n`;
+                const hasAdminRole = client.guilds.cache.get(guildId).members.cache.get(row.userID).roles.cache.has(roles['admin']);
+                userRow += `${prefixArray[i - 1]} ${userMention(row.userID)} ${hasAdminRole ? tmpvoiceIcons['admin'] : ''} ${timeInVoice(time === 'day' ? row.today : row.week)}\n`;
                 i++;
             }
         }
@@ -49,33 +53,32 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
 module.exports = {
     onVoiceChannelConnect: async function(member) {
         try {
-            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: new Date().getTime() });
             await voiceActivity.upsert({ userID: member.id });
+            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: NOW });
         }
         catch (error) {
-            return infoLogger.error(`[VOICE-CONNECT] Ошибка при входе пользователя из канала: ${error}`);
+            return infoLogger.error(`[VOICE-CONNECT] Ошибка изменения данных пользователя в onVoiceChannelConnect: ${error}`);
         }
     },
 
     onVoiceChannelLeave: async function(member) {
         try {
             const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
-            const now = new Date().getTime();
-            const timeSpent = (now - voiceStateRow.joinedAt);
+            const timeSpent = NOW - voiceStateRow['joinedAt'];
 
             return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }
         catch (error) {
-            return infoLogger.error(`[VOICE-LEAVE] Ошибка при выходе пользователя из канала: ${error}`);
+            return infoLogger.error(`[VOICE-LEAVE] Ошибка изменения данных пользователя в onVoiceChannelLeave: ${error}`);
         }
     },
 
     activityIn24h: async function(client) {
-        return await sendActivityEmbed(client, 'Голосовая активность за 24 часа', { today: { [Op.gt]: 60 } }, 'Голосовая активность за 24 часа отсутствует :(', 'day');
+        return await sendActivityEmbed(client, 'Голосовая активность за 24 часа', { today: { [Op.gt]: 60000 } }, 'Голосовая активность за 24 часа отсутствует :(', 'day');
     },
 
     activityIn7days: async function(client) {
-        return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { week: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
+        return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { week: { [Op.gt]: 600000 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
     },
     timeInVoice,
 };
