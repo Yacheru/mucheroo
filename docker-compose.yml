@@ -14,7 +14,6 @@ services:
     restart: always
     volumes:
       - ./data/pg-local:/bitnami/postgresql/data
-      - ./postgres:/bitnami/postgresql/conf
     ports:
       - 5432:5432
     environment:
