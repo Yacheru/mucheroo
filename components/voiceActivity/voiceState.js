@@ -5,8 +5,9 @@ const { images, tmpvoiceIcons, roles } = require('../../config.json');
 const { Op } = require('sequelize');
 
 function timeInVoice(time) {
-    const h = Math.floor(time / 3600);
-    const m = Math.floor(time % 3600 / 60);
+    const seconds = time / 1000;
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor(seconds % 3600 / 60);
 
     return `${h} ч. ${m} мин.`;
 }
@@ -15,7 +16,7 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
     const channel = client.channels.cache.get('1211690986200367176');
     const ActivityEmbed = new EmbedBuilder()
         .setTitle(title)
-        .setImage(images.transperentImage)
+        .setImage(images['transperentImage'])
         .setTimestamp();
 
     try {
@@ -60,7 +61,7 @@ module.exports = {
         try {
             const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
             const now = new Date().getTime();
-            const timeSpent = (now - voiceStateRow.joinedAt) / 1000;
+            const timeSpent = (now - voiceStateRow.joinedAt);
 
             return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }
@@ -74,7 +75,7 @@ module.exports = {
     },
 
     activityIn7days: async function(client) {
-        return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { today: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
+        return await sendActivityEmbed(client, 'Голосовая активность за 7 дней', { week: { [Op.gt]: 520 } }, 'Голосовая активность за 7 дней отсутствует :(', 'week');
     },
     timeInVoice,
 };

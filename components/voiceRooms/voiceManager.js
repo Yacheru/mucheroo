@@ -8,13 +8,13 @@ const voiceArray = [];
 
 module.exports = {
     checkNewState: async function(newChannel, member) {
-        if (newChannel.id === channels.newChannelCreater) {
+        if (newChannel.id === channels['newChannelCreater']) {
             await createTempRoom(member, newChannel.guild, 5);
         }
-        else if (newChannel.id === channels.newChannelAdminCreater) {
+        else if (newChannel.id === channels['newChannelAdminCreater']) {
             await createTempRoom(member, newChannel.guild, 2, true);
         }
-        else if (!member.roles.cache.has(roles.admin) && newChannel.id !== channels.newChannelCreater) {
+        else if (!member.roles.cache.has(roles['admin']) && newChannel.id !== channels['newChannelCreater']) {
             await updatePermissions(newChannel, member);
         }
     },
@@ -46,7 +46,7 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     });
     voiceArray.push(channel.id);
     await member.voice.setChannel(channel);
-    await tempRooms.upsert({ userID: member.id, channelID: channel.id, today: new Date(), adminRoom: isAdmin });
+    await tempRooms.upsert({ userID: member.id, channelID: channel.id, today: new Date().getTime(), adminRoom: isAdmin });
 }
 
 async function updatePermissions(channel, member) {

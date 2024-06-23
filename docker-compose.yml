@@ -8,16 +8,19 @@ services:
       - postgres
 
   postgres:
-    container_name: postgres
-    image: postgres:alpine3.20
+    container_name: pg-local
+    user: root
+    image: docker.io/bitnami/postgresql:16
+    restart: always
+    volumes:
+      - ./data/pg-local:/bitnami/postgresql/data
+      - ./postgres:/bitnami/postgresql/conf
     ports:
       - 5432:5432
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:
