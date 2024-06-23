@@ -22,23 +22,23 @@ module.exports = {
                 }
             }
 
-            // Синхронизация моделей Web Application
-            for (const model of Object.values(wModels)) {
-                infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
-                await model.sync({ force: false });
-                if (typeof model.associate === 'function') {
-                    model.associate(wModels);
-                }
-            }
-
-            // Синхронизация моделей Level Ranks
-            for (const model of Object.values(lModels)) {
-                infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
-                await model.sync({ force: false });
-                if (typeof model.associate === 'function') {
-                    model.associate(lModels);
-                }
-            }
+            // // Синхронизация моделей Web Application
+            // for (const model of Object.values(wModels)) {
+            //     infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
+            //     await model.sync({ force: false });
+            //     if (typeof model.associate === 'function') {
+            //         model.associate(wModels);
+            //     }
+            // }
+            //
+            // // Синхронизация моделей Level Ranks
+            // for (const model of Object.values(lModels)) {
+            //     infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
+            //     await model.sync({ force: false });
+            //     if (typeof model.associate === 'function') {
+            //         model.associate(lModels);
+            //     }
+            // }
 
             infoLogger.info('[SYNCHRONIZATION] Синхронизация завершена.');
         }
