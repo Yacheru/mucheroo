@@ -4,7 +4,7 @@ const { infoLogger } = require('../../logs/logger');
 const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../config.json');
 const { Op } = require('sequelize');
 
-const NOW = Date.now();
+let NOW = Date.now();
 
 function timeInVoice(time) {
     const seconds = time / 1000;
