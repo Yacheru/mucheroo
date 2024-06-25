@@ -4,8 +4,6 @@ const { infoLogger } = require('../../logs/logger');
 const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../config.json');
 const { Op } = require('sequelize');
 
-let NOW = Date.now();
-
 function timeInVoice(time) {
     const seconds = time / 1000;
     const h = Math.floor(seconds / 3600);
@@ -52,9 +50,11 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
 
 module.exports = {
     onVoiceChannelConnect: async function(member) {
+        let now = Date.now();
+
         try {
             await voiceActivity.upsert({ userID: member.id });
-            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: NOW });
+            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: now });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-CONNECT] Ошибка изменения данных пользователя в onVoiceChannelConnect: ${error}`);
@@ -62,9 +62,11 @@ module.exports = {
     },
 
     onVoiceChannelLeave: async function(member) {
+        let now = Date.now();
+
         try {
             const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
-            const timeSpent = NOW - voiceStateRow['joinedAt'];
+            const timeSpent = now - voiceStateRow['joinedAt'];
 
             return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }
