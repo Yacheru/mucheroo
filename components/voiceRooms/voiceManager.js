@@ -46,6 +46,7 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     });
     voiceArray.push(channel.id);
     await member.voice.setChannel(channel);
+    await tempRooms.upsert({ userID: member.id, channelID: channel.id, adminRoom: isAdmin });
 }
 
 async function updatePermissions(channel, member) {
