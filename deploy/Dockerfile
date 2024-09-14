@@ -2,7 +2,7 @@ FROM node:alpine
 
 WORKDIR /mucheroo
 
-COPY . /mucheroo
+COPY .. /mucheroo
 
 RUN npm install
 RUN npm install pm2 -g
