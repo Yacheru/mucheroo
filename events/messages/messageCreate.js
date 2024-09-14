@@ -1,15 +1,20 @@
 const { Events, PermissionsBitField } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
 const { Messages } = require('../../database/models/mucherooDB');
-const { prefix } = require('../../config.json');
+const { prefix, channels } = require('../../config.json');
 
 module.exports = {
 	name: Events.MessageCreate,
 	async execute(message) {
 		await message.guild.members.fetch();
 
-		if (message.channel.id === '1146227727431634975' || message.channel.id === '1196673375209275493') {
-			return await message.react('👍');
+		if (message.channel.id === channels['project-news-cs2'] || message.channel.id === channels['project-news-rust']) {
+			await message.react('❤️');
+			await message.react('👍');
+			await message.react('😥');
+			await message.react('😐');
+			await message.react('🤬');
+			return;
 		}
 
 		if (message.author.bot) return;
