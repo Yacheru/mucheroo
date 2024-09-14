@@ -1,5 +1,5 @@
 const { EmbedBuilder, channelMention } = require('discord.js');
-const { images, channels, tmpvoiceIcons } = require('../../config.json');
+const { images, channels, tmpvoiceIcons } = require('../../configs/config.json');
 
 const selectMenuHandler = require('../../components/voiceRooms/selectmenu');
 const buttonsHandler = require('../../components/voiceRooms/buttons');

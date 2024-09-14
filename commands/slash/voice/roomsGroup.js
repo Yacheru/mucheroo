@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, userMention, channelMention } = require('discord.js');
 const { tempRooms } = require('../../../database/models/mucherooDB');
 const { boostRoomControl } = require('../../../components/boostSystem/boostCommand');
-const { channels } = require('../../../config.json');
+const { channels } = require('../../../configs/config.json');
 
 const embedHandler = require('../../../components/voiceRooms/embeds');
 

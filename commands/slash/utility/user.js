@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder, roleMention, time } = require('discord.js');
-const { images } = require('../../../config.json');
+const { images } = require('../../../configs/config.json');
 
 module.exports = {
     deferred: false,

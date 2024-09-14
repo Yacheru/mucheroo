@@ -1,5 +1,5 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ChannelType, PermissionFlagsBits, channelMention, userMention, EmbedBuilder } = require('discord.js');
-const { images, channels } = require('../../config.json');
+const { images, channels } = require('../../configs/config.json');
 
 const buttonsHandler = require('./buttons');
 

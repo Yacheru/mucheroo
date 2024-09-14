@@ -1,5 +1,5 @@
 node_modules
-config.json
+configs/config.json
 .idea
 *.log
 *.env

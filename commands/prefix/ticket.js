@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const buttonsHandler = require('../../components/ticketSystem/buttons');
 
-const { images } = require('../../config.json');
+const { images } = require('../../configs/config.json');
 const { EmbedBuilder } = require('discord.js');
 
 

@@ -1,5 +1,5 @@
 docker-up:
-	docker-compose up -d
+	docker compose -f ./deploy/docker-compose.yml --env-file ./configs/.env up -d --build
 
 docker-down:
 	docker-compose down

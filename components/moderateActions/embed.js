@@ -1,5 +1,5 @@
 const { EmbedBuilder, Colors, time } = require('discord.js');
-const { icons, images } = require('../../config.json');
+const { icons, images } = require('../../configs/config.json');
 
 
 module.exports = {

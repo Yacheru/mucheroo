@@ -2,7 +2,7 @@
 const { tempRooms } = require('../../database/models/mucherooDB');
 const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
-const { channels, roles } = require('../../config.json');
+const { channels, roles } = require('../../configs/config.json');
 
 const voiceArray = [];
 

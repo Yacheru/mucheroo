@@ -4,7 +4,7 @@ const { EmbedBuilder, time, channelMention } = require('discord.js');
 const { voiceState, warns } = require('../../database/models/mucherooDB');
 const { formatTime, voiceActivityTime, timestampFormatted } = require('./funcs');
 const { lvlBase } = require('../../database/models/level_ranks');
-const { roles } = require('../../config.json');
+const { roles } = require('../../configs/config.json');
 
 module.exports = {
     profileEmbed: async function(member, connectionsRow) {

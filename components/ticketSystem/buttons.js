@@ -1,5 +1,5 @@
 const { PermissionFlagsBits, ButtonStyle, ButtonBuilder, ActionRowBuilder } = require('discord.js');
-const { channels } = require('../../config.json');
+const { channels } = require('../../configs/config.json');
 
 module.exports = {
     ticketButtons: function() {

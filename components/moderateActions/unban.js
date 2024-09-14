@@ -1,4 +1,4 @@
-const { channels } = require('../../config.json');
+const { channels } = require('../../configs/config.json');
 const { moderateEmbed } = require('./embed');
 
 

@@ -1,5 +1,5 @@
 const { EmbedBuilder, channelMention, Colors, time, userMention } = require('discord.js');
-const config = require('../../config.json');
+const config = require('../../configs/config.json');
 
 const danger = Colors.Red;
 const warn = Colors.Yellow;

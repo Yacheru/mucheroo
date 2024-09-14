@@ -1,6 +1,6 @@
 const { tempRoomsTemplate, tempRooms } = require('../../database/models/mucherooDB');
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
-const { tmpvoiceIcons } = require('../../config.json');
+const { tmpvoiceIcons } = require('../../configs/config.json');
 
 const embedHandler = require('./embeds');
 

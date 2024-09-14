@@ -1,5 +1,5 @@
 const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
-const { token, prefix } = require('./config.json');
+const { token, prefix } = require('./configs/config.json');
 const { infoLogger } = require('./logs/logger.js');
 const fs = require('node:fs');
 const path = require('node:path');

@@ -1,5 +1,5 @@
 const { moderateEmbed } = require('./embed');
-const { channels } = require('../../config.json');
+const { channels } = require('../../configs/config.json');
 
 module.exports = {
 	unmuteMember: async function(interaction) {

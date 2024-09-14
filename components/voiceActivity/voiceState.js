@@ -1,7 +1,7 @@
 const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
 const { userMention, Colors, EmbedBuilder } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
-const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../config.json');
+const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../configs/config.json');
 const { Op } = require('sequelize');
 
 function timeInVoice(time) {

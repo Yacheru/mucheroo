@@ -1,7 +1,7 @@
 const { Events, PermissionsBitField } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
 const { Messages } = require('../../database/models/mucherooDB');
-const { prefix, channels } = require('../../config.json');
+const { prefix, channels } = require('../../configs/config.json');
 
 module.exports = {
 	name: Events.MessageCreate,
