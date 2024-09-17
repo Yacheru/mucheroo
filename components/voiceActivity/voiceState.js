@@ -35,7 +35,7 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
             }
         }
         else {
-            userRow += noData;
+            userRow = noData;
         }
 
         ActivityEmbed.setDescription(userRow).setColor(Colors.Blue);
@@ -50,11 +50,9 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
 
 module.exports = {
     onVoiceChannelConnect: async function(member) {
-        let now = Date.now();
-
         try {
             await voiceActivity.upsert({ userID: member.id });
-            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: now });
+            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: Date.now() });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-CONNECT] Ошибка изменения данных пользователя в onVoiceChannelConnect: ${error}`);
@@ -62,11 +60,9 @@ module.exports = {
     },
 
     onVoiceChannelLeave: async function(member) {
-        let now = Date.now();
-
         try {
             const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
-            const timeSpent = now - voiceStateRow['joinedAt'];
+            const timeSpent = Date.now() - voiceStateRow['joinedAt'];
 
             return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }

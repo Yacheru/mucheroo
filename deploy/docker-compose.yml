@@ -3,7 +3,7 @@ services:
     container_name: mucheroo
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: deploy/Dockerfile
     depends_on:
       postgres:
         condition: service_healthy
