@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 const buttonsHandler = require('../../components/ticketSystem/buttons');
 
 const { images } = require('../../configs/config.json');

@@ -2,8 +2,6 @@ const { Events } = require('discord.js');
 const { infoLogger } = require('../../logs/logger.js');
 const { dayTask, weekTask } = require('../../database/tasks.js');
 const mModels = require('../../database/models/mucherooDB/index.js');
-// const wModels = require('../../database/models/webApplication/index.js');
-// const lModels = require('../../database/models/level_ranks/index.js');
 const { monitoringUpdate } = require('../../database/tasks');
 
 module.exports = {
@@ -13,7 +11,6 @@ module.exports = {
         try {
             infoLogger.info('[CONNECTION] Установка соединения...');
 
-            // Синхронизация моделей MucherooDB
             for (const model of Object.values(mModels)) {
                 infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
                 await model.sync({ force: false });
@@ -21,24 +18,6 @@ module.exports = {
                     model.associate(mModels);
                 }
             }
-
-            // // Синхронизация моделей Web Application
-            // for (const model of Object.values(wModels)) {
-            //     infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
-            //     await model.sync({ force: false });
-            //     if (typeof model.associate === 'function') {
-            //         model.associate(wModels);
-            //     }
-            // }
-            //
-            // // Синхронизация моделей Level Ranks
-            // for (const model of Object.values(lModels)) {
-            //     infoLogger.info(`[TABLES] Регистрация таблицы: ${model.name}...`);
-            //     await model.sync({ force: false });
-            //     if (typeof model.associate === 'function') {
-            //         model.associate(lModels);
-            //     }
-            // }
 
             infoLogger.info('[SYNCHRONIZATION] Синхронизация завершена.');
         }
