@@ -6,17 +6,6 @@ const { GameDig } = require('gamedig');
 
 async function fetchData(client, row) {
     const channel = client.guilds.cache.get(row.guildID).channels.cache.get(row.channelID);
-    const query = await GameDig.query({
-        type: 'counterstrike2',
-        host: row.ip,
-        port: row.port,
-    });
-
-    if (query) {
-        row.disabled = false;
-        const embed = await serverEmbed(query);
-    }
-
     return new Promise((resolve, reject) => {
         GameDig.query({
             type: 'counterstrike2',
