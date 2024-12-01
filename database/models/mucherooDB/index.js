@@ -1,19 +1,19 @@
 const Messages = require('./messages');
-const tempRooms = require('./temprooms');
-const tempRoomsTemplate = require('./tempRoomsTemplates');
-const warns = require('./warns');
-const boostedMembers = require('./boostedMembers');
-const voiceActivity = require('./voiceActivity');
-const voiceState = require('./voiceState');
+const TempRooms = require('./temprooms');
+const TempRoomsTemplate = require('./tempRoomsTemplates');
+const Warns = require('./warns');
+const BoostedMembers = require('./boostedMembers');
+const VoiceActivity = require('./voiceActivity');
+const VoiceState = require('./voiceState');
 const Monitoring = require('./monitoring');
 
 module.exports = {
 	Messages,
-	tempRooms,
-	tempRoomsTemplate,
-	warns,
-	boostedMembers,
-	voiceActivity,
-	voiceState,
+	TempRooms,
+	TempRoomsTemplate,
+	Warns,
+	BoostedMembers,
+	VoiceActivity,
+	VoiceState,
 	Monitoring,
 };

@@ -1,5 +1,6 @@
 const { timeInVoice } = require('../voiceActivity/voiceState');
 const { EmbedBuilder, Colors } = require('discord.js');
+const { infoLogger } = require('../../logs/logger');
 
 
 function roundTo(num) {
@@ -12,10 +13,11 @@ function roundTo(num) {
 }
 
 module.exports = {
-    serverEmbed(server) {
+    async serverEmbed(server) {
         let players = '';
         let kills = '';
         let time = '';
+        let code = '';
         let stats = [];
         let i = 1;
 
@@ -32,7 +34,7 @@ module.exports = {
         }
         else {
             stats = [
-                { name: '\u200b', value: '- На сервере нет игроков' },
+                { name: '\u200b', value: '- **На сервере нет игроков**' },
             ];
         }
 
@@ -46,6 +48,19 @@ module.exports = {
         };
         const precent = `${roundTo((server.numplayers / server.maxplayers) * 100)}%`;
 
+        try {
+            response = await fetch(`https://api.ip.sb/geoip/${server.connect}`);
+            if (!response.ok) {
+                infoLogger.info(`Статус ответа: ${response.status}`);
+            }
+
+            const json = await response.json();
+            code = json['country_code'];
+        }
+        catch (e) {
+            infoLogger.info(`Ошибка ip api: ${e}`);
+        }
+
         return new EmbedBuilder()
             .setColor(Colors.Green)
             .setTitle(`${server.name}`)
@@ -54,7 +69,7 @@ module.exports = {
             .addFields(
                 { name: 'Карта:', value: `${server.map}`, inline: true },
                 { name: 'Игроков:', value: `${server.numplayers}/${server.maxplayers} [${Math.round((server.numplayers / server.maxplayers) * 100)}%]`, inline: true },
-                { name: 'Локация:', value: ':flag_ru: RU', inline: true },
+                { name: 'Локация:', value: `:flag_${code.toLowerCase()}: ${code}`, inline: true },
                 ...stats,
             )
             .setImage(images[precent])

@@ -1,5 +1,5 @@
 {
-	"extends": ["eslint:recommended", "google"],
+	"extends": ["eslint:recommended"],
 	"env": {
 		"node": true,
 		"es6": true
@@ -33,7 +33,6 @@
 		"no-multi-spaces": "error",
 		"no-multiple-empty-lines": ["error", { "max": 2, "maxEOF": 1, "maxBOF": 0 }],
 		"no-shadow": ["error", { "allow": ["err", "resolve", "reject"] }],
-		"no-trailing-spaces": ["error"],
 		"no-var": "error",
 		"no-undef": 0,
 		"object-curly-spacing": ["error", "always"],

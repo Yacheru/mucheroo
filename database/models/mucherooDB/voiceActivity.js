@@ -1,11 +1,11 @@
 const db = require('./../../index.js');
 const { Model, DataTypes } = require('sequelize');
 
-class voiceActivity extends Model {
+class VoiceActivity extends Model {
 	static associate() {}
 }
 
-voiceActivity.init(
+VoiceActivity.init(
 	{
 		userID: {
 			type: DataTypes.STRING,
@@ -30,4 +30,4 @@ voiceActivity.init(
 	},
 );
 
-module.exports = voiceActivity;
+module.exports = VoiceActivity;

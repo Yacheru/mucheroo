@@ -1,15 +1,17 @@
+name: "mucheroo-compose"
+
 services:
-  mucheroo:
-    container_name: mucheroo
-    build:
-      context: ..
-      dockerfile: deploy/Dockerfile
-    depends_on:
-      postgres:
-        condition: service_healthy
+#  mucheroo:
+#    container_name: mucheroo
+#    build:
+#      context: ..
+#      dockerfile: deploy/Dockerfile
+#    depends_on:
+#      postgres:
+#        condition: service_healthy
 
   postgres:
-    container_name: postgres
+    container_name: mucheroo-postgres
     user: root
     ports:
       - 5432:5432

@@ -2,12 +2,11 @@ const db = require('./../../index.js');
 const { infoLogger } = require('../../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
-
-class boostedMembers extends Model {
+class BoostedMembers extends Model {
 	static associate() {}
 }
 
-boostedMembers.init(
+BoostedMembers.init(
 	{
 		userID: {
 			type: DataTypes.STRING,
@@ -31,5 +30,4 @@ boostedMembers.init(
 	},
 );
 
-module.exports = boostedMembers;
-
+module.exports = BoostedMembers;

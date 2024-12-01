@@ -2,11 +2,11 @@ const db = require('./../../index.js');
 // const { infoLogger } = require('../../logs/logger.js');
 const { Model, DataTypes } = require('sequelize');
 
-class tempRoomsTemplate extends Model {
+class TempRoomsTemplate extends Model {
 	static associate() {}
 }
 
-tempRoomsTemplate.init(
+TempRoomsTemplate.init(
 	{
 		userID: {
 			type: DataTypes.STRING,
@@ -38,4 +38,4 @@ tempRoomsTemplate.init(
 	},
 );
 
-module.exports = tempRoomsTemplate;
+module.exports = TempRoomsTemplate;

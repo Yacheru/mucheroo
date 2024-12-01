@@ -1,11 +1,11 @@
 const db = require('./../../index.js');
 const { Model, DataTypes } = require('sequelize');
 
-class warns extends Model {
+class Warns extends Model {
 	static associate() {}
 }
 
-warns.init(
+Warns.init(
 	{
 		userID: {
 			type: DataTypes.STRING,
@@ -22,4 +22,4 @@ warns.init(
 	},
 );
 
-module.exports = warns;
+module.exports = Warns;
