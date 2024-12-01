@@ -1,4 +1,4 @@
-const { timeInVoice } = require('../voiceActivity/voiceState');
+const { timeInGame, timeInVoice } = require('../voiceActivity/voiceState');
 const { EmbedBuilder, Colors } = require('discord.js');
 
 function roundTo(num) {
@@ -20,7 +20,7 @@ module.exports = {
 
         server.players.forEach((row) => players += `${i++}) ${row.name.slice(0, 17)}\n`);
         server.players.forEach((row) => kills += `${row.raw.score}\n`);
-        server.players.forEach((row) => time += `${timeInVoice(row.raw.time)}\n`);
+        server.players.forEach((row) => {time += `${timeInVoice(row.raw.time * 1000)}\n`;});
 
         if (players) {
             stats = [
