@@ -20,7 +20,6 @@ module.exports = {
                 { name: '> 7 дней', value: `\`\`\`${timeInVoice(voiceActivity.week)}\`\`\``, inline: true },
                 { name: '> Всё время', value: `\`\`\`${timeInVoice(voiceActivity.all)}\`\`\``, inline: true },
             )
-            .setImage(config.images.transperentImage)
             .setTimestamp();
     },
     notInVoice: function() {
