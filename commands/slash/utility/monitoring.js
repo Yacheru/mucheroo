@@ -1,5 +1,6 @@
 const { Monitoring } = require('../../../database/models/mucherooDB');
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
+const { infoLogger } = require('../../../logs/logger');
 
 module.exports = {
     deferred: true,
@@ -44,17 +45,36 @@ module.exports = {
                     return await interaction.editReply({ content: 'Такой мониторинг уже существует!' });
                 }
 
-                await Monitoring.create({ channelID: channel.id, guildID: interaction.guild.id, ip: ip, port: port });
+                const response = await fetch(`https://api.ip.sb/geoip/${ip}`);
+                if (!response.ok) {
+                    return await interaction.editReply({ content: `Ошибка получения локации сервера: ${response.status}` });
+                }
+
+                const json = await response.json();
+                const code = json['country_code'];
+
+                await Monitoring.create({ channelID: channel.id, guildID: interaction.guild.id, country_code: code, ip: ip, port: port });
                 return await interaction.editReply({ content: `Мониторинг сервера ${ip}:${port} успешно добавлен!` });
             case 'remove':
                 if (monitorRow) {
-                    interaction.guild.channels.cache.get(monitorRow.channelID)
-                        .messages.fetch(monitorRow.messageID).then((message) => message.delete());
-                    await monitorRow.destroy();
-                    return await interaction.editReply({ content: `Мониторинг ${ip}:${port} успешно удален!` });
+                    return interaction.guild.channels.fetch(monitorRow.channelID)
+                        .then((c) => {
+                            c.messages.fetch(monitorRow.messageID)
+                                .then(async (message) => {
+                                    console.log(message);
+                                    message.delete();
+                                    await monitorRow.destroy();
+                                    await interaction.editReply({ content: `Мониторинг ${ip}:${port} успешно удален!` });
+                                })
+                                .catch(async (error) => {
+                                    await interaction.editReply({ content: `Ошибка поиска сообщения: ${error}` });
+                                });
+                        })
+                        .catch(async (error) => {
+                            await interaction.editReply({ content: `Ошибка поиска канала: ${error}` });
+                        });
                 }
-
-                return await interaction.editReply({ content: 'На сервере не зарегистрирован данный сервер!' });
+                return await interaction.editReply({ content: 'На сервере не зарегистрирован данный игровой сервер!' });
         }
     },
 };

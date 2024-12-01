@@ -19,7 +19,7 @@ Messages.init(
 		},
 	}, {
 		sequelize: db.sequelize,
-		modelName: 'Messages',
+		modelName: 'messages',
 		hooks: {
 			afterCreate: (user, options) => {
 				infoLogger.info(`[MESSAGES] Пользователь ${user.userID} занесен в таблицу.`);

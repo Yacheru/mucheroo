@@ -19,11 +19,7 @@ module.exports = {
             catch (error) {
                 return infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в сутки:', error);
             }
-        },
-        {
-            timezone: 'Europe/Moscow',
-        },
-        );
+        }, { timezone: 'Europe/Moscow' });
     },
 
     weekTask: async function(client) {
@@ -37,11 +33,7 @@ module.exports = {
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в неделю:', error);
             }
-        },
-            {
-                timezone: 'Europe/Moscow',
-            },
-        );
+        }, { timezone: 'Europe/Moscow' });
     },
     monitoringUpdate: async function(client) {
         cron.schedule('* * * * *', async () => {
@@ -51,6 +43,6 @@ module.exports = {
                         .then()
                         .catch((error) => infoLogger.error(`[MONITORING] Ошибка выполнения обновления ${error}`));
                 });
-        });
+        }, { timezone: 'Europe/Moscow' });
     },
 };

@@ -17,6 +17,9 @@ Monitoring.init(
         guildID: {
             type: DataTypes.STRING,
         },
+        country_code: {
+            type: DataTypes.STRING,
+        },
         ip: {
             type: DataTypes.STRING,
         },
@@ -30,7 +33,7 @@ Monitoring.init(
     {
         timestamps: false,
         sequelize: db.sequelize,
-        modelName: 'Monitoring',
+        modelName: 'monitoring',
     },
 );
 
