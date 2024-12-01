@@ -1,6 +1,5 @@
 const { Monitoring } = require('../../../database/models/mucherooDB');
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { infoLogger } = require('../../../logs/logger');
 
 module.exports = {
     deferred: true,

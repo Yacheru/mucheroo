@@ -1,4 +1,4 @@
-const { tempRooms } = require('../../database/models/mucherooDB');
+const { TempRooms } = require('../../database/models/mucherooDB');
 const { infoLogger } = require('../../logs/logger');
 
 const selectMenuHandler = require('./selectmenu.js');
@@ -14,7 +14,7 @@ module.exports = {
         if (privateRoomsNoVoiceCustomIDs.includes(interaction.customId)) {
             if (!interaction.member.voice.channel) return interaction.reply({ embeds: [embedHandler.notInVoice()], ephemeral: true });
 
-            const tempRoomRow = await tempRooms.findOne({ where: { userID: interaction.user.id } });
+            const tempRoomRow = await TempRooms.findOne({ where: { userID: interaction.user.id } });
             if (!tempRoomRow) return interaction.reply({ embeds: [embedHandler.notOwner()], ephemeral: true });
         }
 

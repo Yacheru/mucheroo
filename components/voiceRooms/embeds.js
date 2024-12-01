@@ -1,11 +1,28 @@
 const { EmbedBuilder, channelMention, Colors, time, userMention } = require('discord.js');
 const config = require('../../configs/config.json');
+const { timeInVoice } = require('../voiceActivity/voiceState');
+const { timestampFormatted } = require('../profile/funcs');
 
 const danger = Colors.Red;
 const warn = Colors.Yellow;
 const success = Colors.Green;
+const neutral = Colors.Blue;
 
 module.exports = {
+    voiceTimeSpent: function(voiceState, voiceActivity, member) {
+        return new EmbedBuilder()
+            .setTitle(`Время в войсе | ${member.displayName}`)
+            .setDescription(`- Последняя активность: ${timestampFormatted(voiceState.joinedAt, false)}`)
+            .setThumbnail(member.displayAvatarURL())
+            .setColor(neutral)
+            .addFields(
+                { name: '> Сегодня', value: `\`\`\`${timeInVoice(voiceActivity.today)}\`\`\``, inline: true },
+                { name: '> 7 дней', value: `\`\`\`${timeInVoice(voiceActivity.week)}\`\`\``, inline: true },
+                { name: '> Всё время', value: `\`\`\`${timeInVoice(voiceActivity.all)}\`\`\``, inline: true },
+            )
+            .setImage(config.images.transperentImage)
+            .setTimestamp();
+    },
     notInVoice: function() {
         return new EmbedBuilder()
             .setColor(warn)

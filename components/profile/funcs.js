@@ -1,4 +1,4 @@
-const { voiceActivity } = require('../../database/models/mucherooDB');
+const { VoiceActivity } = require('../../database/models/mucherooDB');
 const { time } = require('discord.js');
 
 
@@ -32,7 +32,7 @@ module.exports = {
     },
 
     voiceActivityTime: async function(memberid) {
-        const voiceActivityRow = await voiceActivity.findOne({ where: { userID: memberid } });
+        const voiceActivityRow = await VoiceActivity.findOne({ where: { userID: memberid } });
 
         let day = '0 ч. 0 мин.';
         let week = '0 ч. 0 мин.';

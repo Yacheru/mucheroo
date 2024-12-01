@@ -1,4 +1,4 @@
-const { tempRoomsTemplate, tempRooms } = require('../../database/models/mucherooDB');
+const { TempRoomsTemplate, TempRooms } = require('../../database/models/mucherooDB');
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder } = require('discord.js');
 const { tmpvoiceIcons } = require('../../configs/config.json');
 
@@ -61,13 +61,13 @@ module.exports = {
 	}, templateRoomsCallback: async function(interaction) {
 		const template = interaction.values[0];
 		const voiceRoom = interaction.member.voice.channel;
-		const ownTeplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
+		const ownTeplateRow = await TempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
 
 		switch (template) {
 			case 'ownTemplate':
 				if (ownTeplateRow) {
 					await voiceRoom.edit({ name: ownTeplateRow.channelName, userLimit: ownTeplateRow.channelLimit, bitrate: interaction.guild.premiumTier > 1 ? ownTeplateRow.channelBitrate : '64_000' });
-					await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
+					await TempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
 					return interaction.reply({ embeds: [embedHandler.templateChannel('шаблонную')], ephemeral: true });
 				}
 				else {
@@ -77,13 +77,13 @@ module.exports = {
 			case 'communicat':
 				await voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Connect: true, ViewChannel: true });
 				await voiceRoom.edit({ userLimit: 25, bitrate: interaction.guild.premiumTier > 1 ? '128_000' : '64_000' });
-				await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
+				await TempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
 				return interaction.reply({ embeds: [embedHandler.templateChannel('общение')], ephemeral: true });
 			case 'cinema':
 				await voiceRoom.edit({ userLimit: 0, bitrate: '64_000' });
 				await voiceRoom.permissionOverwrites.edit(interaction.member, { Speak: true });
 				await voiceRoom.permissionOverwrites.edit(interaction.guild.roles.everyone, { Speak: false });
-				await tempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
+				await TempRooms.update({ templateRoom: true }, { where: { userID: interaction.member.id } });
 				return interaction.reply({ embeds: [embedHandler.templateChannel('кинотеатр')], ephemeral: true });
 		}
 	}, bitrateChangeCallback: async function(interaction) {

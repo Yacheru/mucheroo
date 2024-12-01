@@ -1,7 +1,7 @@
 const SteamID = require('steamid');
 
-const { EmbedBuilder, time, channelMention } = require('discord.js');
-const { voiceState, warns } = require('../../database/models/mucherooDB');
+const { EmbedBuilder, channelMention } = require('discord.js');
+const { VoiceState, Warns } = require('../../database/models/mucherooDB');
 const { formatTime, voiceActivityTime, timestampFormatted } = require('./funcs');
 const { lvlBase } = require('../../database/models/level_ranks');
 const { roles } = require('../../configs/config.json');
@@ -11,8 +11,8 @@ module.exports = {
         const connectLink = '[Подключить](https://yacheru.ru/login)';
         const isAdmin = member.roles.cache.has(roles.admin) ? 'Да' : 'Нет';
 
-        const warnsRow = await warns.findOne({ where: { userID: member.id } });
-        const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
+        const warnsRow = await Warns.findOne({ where: { userID: member.id } });
+        const voiceStateRow = await VoiceState.findOne({ where: { userID: member.id } });
 
         let stats = '- Общий онлайн: ';
         if (connectionsRow && connectionsRow.steam !== '0') {

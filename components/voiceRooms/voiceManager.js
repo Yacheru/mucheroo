@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-const { tempRooms } = require('../../database/models/mucherooDB');
+const { TempRooms } = require('../../database/models/mucherooDB');
 const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
 const { channels, roles } = require('../../configs/config.json');
@@ -46,11 +46,11 @@ async function createTempRoom(member, guild, userLimit, isAdmin = false) {
     });
     voiceArray.push(channel.id);
     await member.voice.setChannel(channel);
-    await tempRooms.upsert({ userID: member.id, channelID: channel.id, adminRoom: isAdmin });
+    await TempRooms.upsert({ userID: member.id, channelID: channel.id, adminRoom: isAdmin });
 }
 
 async function updatePermissions(channel, member) {
-    const tempRoomRow = await tempRooms.findOne({ where: { channelID: channel.id } });
+    const tempRoomRow = await TempRooms.findOne({ where: { channelID: channel.id } });
     if (tempRoomRow && tempRoomRow.adminRoom === true) {
         await channel.permissionOverwrites.edit(member.id, {
             ViewChannel: true,
@@ -64,7 +64,7 @@ async function updatePermissions(channel, member) {
 async function deleteTempRoom(channel) {
     try {
         await channel.delete();
-        await tempRooms.destroy({ where: { channelID: channel.id } });
+        await TempRooms.destroy({ where: { channelID: channel.id } });
         const index = voiceArray.indexOf(channel.id);
         if (index !== -1) {
             voiceArray.splice(index, 1);

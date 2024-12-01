@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, PermissionFlagsBits, userMention } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { Messages } = require('../../../database/models/mucherooDB');
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { voiceActivity } = require('../database/models/mucherooDB/');
+const { VoiceActivity } = require('../database/models/mucherooDB/');
 const { activityIn24h, activityIn7days } = require('../components/voiceActivity/voiceState.js');
 const { infoLogger } = require('../logs/logger.js');
 const { Monitoring } = require('./models/mucherooDB');
@@ -14,7 +14,7 @@ module.exports = {
         cron.schedule('0 0 * * *', async () => {
             try {
                 await activityIn24h(client);
-                return await voiceActivity.update({ today: 0 }, { where: {} });
+                return await VoiceActivity.update({ today: 0 }, { where: {} });
             }
             catch (error) {
                 return infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в сутки:', error);
@@ -28,7 +28,7 @@ module.exports = {
         cron.schedule('0 0 * * 0', async () => {
             try {
                 await activityIn7days(client);
-                return await voiceActivity.update({ week: 0 }, { where: { } });
+                return await VoiceActivity.update({ week: 0 }, { where: { } });
             }
             catch (error) {
                 infoLogger.error('[VOICE-ACTIVITY] Ошибка в периодической задаче раз в неделю:', error);
@@ -36,6 +36,8 @@ module.exports = {
         }, { timezone: 'Europe/Moscow' });
     },
     monitoringUpdate: async function(client) {
+        infoLogger.info('[TASKS] Запуск ежеминутной задачи...');
+
         cron.schedule('* * * * *', async () => {
             (await Monitoring.findAll({ where: {} }))
                 .forEach((row) => {

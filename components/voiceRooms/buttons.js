@@ -1,5 +1,5 @@
 const { ButtonStyle, ButtonBuilder, ActionRowBuilder, Collection, userMention } = require('discord.js');
-const { tempRooms, tempRoomsTemplate } = require('../../database/models/mucherooDB');
+const { TempRooms, TempRoomsTemplate } = require('../../database/models/mucherooDB');
 const { tmpvoiceIcons } = require('../../configs/config.json');
 
 const embedHandler = require('./embeds');
@@ -83,13 +83,13 @@ module.exports = {
 				.setStyle(ButtonStyle.Danger),
 		);
 	}, deleteTemplateButtonCallback: async function(interaction) {
-		await tempRoomsTemplate.destroy({ where: { userID: interaction.member.id } });
+		await TempRoomsTemplate.destroy({ where: { userID: interaction.member.id } });
 		return interaction.update({ ephemeral: true, embeds: [embedHandler.deleteTemplateSuccess()], components: [] });
 	}, cancelTemplatecallback: function(interaction) {
 		return interaction.update({ embeds: [embedHandler.cancelCreateTemplate()], ephemeral: true, components: [] });
 	}, createTemplateSuccessCallback: async function(interaction) {
 		const voiceChannel = interaction.member.voice.channel;
-		await tempRoomsTemplate.create({ userID: interaction.member.id, channelLimit: voiceChannel.userLimit, channelName: voiceChannel.name, channelBitrate: voiceChannel.bitrate });
+		await TempRoomsTemplate.create({ userID: interaction.member.id, channelLimit: voiceChannel.userLimit, channelName: voiceChannel.name, channelBitrate: voiceChannel.bitrate });
 		return interaction.update({ embeds: [embedHandler.createTemplateSuccess()], ephemeral: true, components: [] });
 	}, voiceRoomsUpslotCallback: function(interaction) {
 		if (interaction.member.voice.channel.userLimit === 99) return interaction.reply({ embeds: [embedHandler.maxLimit()], ephemeral: true });
@@ -110,7 +110,7 @@ module.exports = {
 		hideCollection.set(memberChannelId, hideCollection.get(memberChannelId) === 'unhide' ? 'hide' : 'unhide');
 	}, voiceRoomsPrivateCallback: async function(interaction) {
 		const memberChannelId = interaction.member.voice.channel.id;
-		const tempRoomRow = await tempRooms.findOne({ where: { channelID: memberChannelId } });
+		const tempRoomRow = await TempRooms.findOne({ where: { channelID: memberChannelId } });
 
 		if (tempRoomRow.adminRoom) return interaction.reply({ embeds: [embedHandler.noOpenAdminRoom()], ephemeral: true });
 
@@ -132,7 +132,7 @@ module.exports = {
 		interaction.member.voice.channel.edit({ userLimit: interaction.member.voice.channel.userLimit - 1 });
 		interaction.reply({ embeds: [embedHandler.newLimit()], ephemeral: true });
 	}, voiceRoomsInfoCallback: async function(interaction) {
-		const tempRoomRow = await tempRooms.findOne({ where: { channelID: interaction.member.voice.channel.id } });
+		const tempRoomRow = await TempRooms.findOne({ where: { channelID: interaction.member.voice.channel.id } });
 		const adminRoom = tempRoomRow.adminRoom ? 'Да' : 'Нет';
 		const templateRoom = tempRoomRow.templateRoom ? 'Да' : 'Нет';
 		const channel = interaction.member.voice.channel;
@@ -144,7 +144,7 @@ module.exports = {
 
 		return interaction.reply({ embeds: [embedHandler.infoChannel(channel, interaction.member.displayAvatarURL(), tempRoomRow.userID, adminRoom, templateRoom, membersArray)], ephemeral: true });
 	}, voiceRoomsTemplateCallback: async function(interaction) {
-		const ownTemplateRow = await tempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
+		const ownTemplateRow = await TempRoomsTemplate.findOne({ where: { userID: interaction.member.id } });
 		const voiceChannel = interaction.member.voice.channel;
 
 		return interaction.reply({ embeds: [embedHandler.haveOrCreateTemplate(interaction.member, ownTemplateRow, voiceChannel)], components: [ownTemplateRow ? this.deleteTemplateButton() : this.createTemplateButton()], ephemeral: true });

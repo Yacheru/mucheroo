@@ -1,4 +1,4 @@
-const { boostedMembers } = require('../../database/models/mucherooDB');
+const { BoostedMembers } = require('../../database/models/mucherooDB');
 const { PermissionFlagsBits, ChannelType } = require('discord.js');
 const { channels } = require('../../configs/config.json');
 const { boostEmbed } = require('./embeds');
@@ -34,12 +34,12 @@ module.exports = {
             boosted = true;
         }
 
-        await boostedMembers.findOrCreate({ where: { userID: newMember.id }, defaults: { userID: newMember.id, channelID: voiceChannel.id, boostTime: Date.now() } });
+        await BoostedMembers.findOrCreate({ where: { userID: newMember.id }, defaults: { userID: newMember.id, channelID: voiceChannel.id, boostTime: Date.now() } });
         const boostChannel = await newMember.guild.channels.cache.get(channels.serverBoostChannel);
 		if (boostChannel) return boostChannel.send({ content: `<@${newMember.id}>`, embeds: [boostEmbed(newMember, boosted, voiceChannel)] });
     },
     onBoostRemove: async function(newMember) {
-        await boostedMembers.destroy({ where: { userID: newMember.id } });
+        await BoostedMembers.destroy({ where: { userID: newMember.id } });
 
         const existingVoiceChannel = newMember.guild.channels.cache.find(
             (channel) => channel.name === newMember.user.username && channel.type === ChannelType.GuildVoice);

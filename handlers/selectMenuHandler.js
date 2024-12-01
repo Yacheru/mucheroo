@@ -1,5 +1,5 @@
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder, ActionRowBuilder, userMention } = require('discord.js');
-const { warns } = require('../database/models/mucherooDB');
+const { Warns } = require('../database/models/mucherooDB');
 const { icons } = require('../configs/config.json');
 
 
@@ -33,11 +33,11 @@ module.exports = {
 	}, warnTakeSelectCallback: async function(interaction) {
 		const [memberId, warnKey] = interaction.values[0].split(',');
 
-		const warnRow = await warns.findOne({ where: { userID: memberId } });
+		const warnRow = await Warns.findOne({ where: { userID: memberId } });
 
 		delete warnRow.warns[warnKey];
 
-		await warns.update({ warns: { ...warnRow.warns } }, { where: { userID: memberId } });
+		await Warns.update({ warns: { ...warnRow.warns } }, { where: { userID: memberId } });
 
 		interaction.update({
 			content: `Вы успешно удалили предупреждение ${warnKey} пользователя ${userMention(memberId)}`,

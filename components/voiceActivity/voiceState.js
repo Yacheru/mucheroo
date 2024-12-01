@@ -1,4 +1,4 @@
-const { voiceState, voiceActivity } = require('../../database/models/mucherooDB');
+const { VoiceState, VoiceActivity } = require('../../database/models/mucherooDB');
 const { userMention, Colors, EmbedBuilder } = require('discord.js');
 const { infoLogger } = require('../../logs/logger');
 const { images, tmpvoiceIcons, roles, guildId, channels } = require('../../configs/config.json');
@@ -20,7 +20,7 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
         .setTimestamp();
 
     try {
-        const activityRows = await voiceActivity.findAll({ where: queryCondition, limit: 10, order: [['today', 'DESC']] });
+        const activityRows = await VoiceActivity.findAll({ where: queryCondition, limit: 10, order: [['today', 'DESC']] });
 
         let userRow = '';
         let i = 1;
@@ -51,8 +51,8 @@ async function sendActivityEmbed(client, title, queryCondition, noData, time) {
 module.exports = {
     onVoiceChannelConnect: async function(member) {
         try {
-            await voiceActivity.upsert({ userID: member.id });
-            await voiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: Date.now() });
+            await VoiceActivity.upsert({ userID: member.id });
+            await VoiceState.upsert({ userID: member.id, channelID: member.channel.id, joinedAt: Date.now() });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-CONNECT] Ошибка изменения данных пользователя в onVoiceChannelConnect: ${error}`);
@@ -61,10 +61,10 @@ module.exports = {
 
     onVoiceChannelLeave: async function(member) {
         try {
-            const voiceStateRow = await voiceState.findOne({ where: { userID: member.id } });
+            const voiceStateRow = await VoiceState.findOne({ where: { userID: member.id } });
             const timeSpent = Date.now() - voiceStateRow['joinedAt'];
 
-            return await voiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
+            return await VoiceActivity.increment({ today: timeSpent, week: timeSpent, all: timeSpent }, { where: { userID: member.id } });
         }
         catch (error) {
             return infoLogger.error(`[VOICE-LEAVE] Ошибка изменения данных пользователя в onVoiceChannelLeave: ${error}`);

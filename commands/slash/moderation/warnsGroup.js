@@ -1,6 +1,6 @@
 const selectMenuHandler = require('../../../handlers/selectMenuHandler');
 
-const { warns } = require('../../../database/models/mucherooDB');
+const { Warns } = require('../../../database/models/mucherooDB');
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { v4: uuidv4 } = require('uuid');
 
@@ -43,16 +43,16 @@ module.exports = {
 
 		const now = Date.now();
 		const key = `#${uuidv4()}`.slice(0, 6);
-		const warnRow = await warns.findOne({ where: { userID: member.id } });
+		const warnRow = await Warns.findOne({ where: { userID: member.id } });
 
 		switch (command) {
 		case 'give':
 			if (warnRow) {
 				const newData = { [key]: [interaction.member.id, reason, now] };
-				await warns.update({ warns: { ...warnRow.warns, ...newData } }, { where: { userID: member.id } });
+				await Warns.update({ warns: { ...warnRow.warns, ...newData } }, { where: { userID: member.id } });
 			}
 			else {
-				await warns.create({ userID: member.id, warns: { [key]: [interaction.member.id, reason, now] } });
+				await Warns.create({ userID: member.id, warns: { [key]: [interaction.member.id, reason, now] } });
 			}
 
 			return interaction.reply({ content: `Вы успешно выдали предупреждение ${member.displayName} c причиной ${reason} и ID: ${key}`, ephemeral: true });
